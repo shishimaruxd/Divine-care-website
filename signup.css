@@ -1,0 +1,57 @@
+/* Center the form container and move it 50px down */
+.signup-container {
+    width: 100%;
+    max-width: 400px;
+    margin: 150px auto; /* Increased from 100px to 150px */
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Remove unwanted title text */
+.signup-container h2 {
+    display: none;
+}
+
+/* Style input fields */
+.signup-container label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.signup-container input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Center the Sign Up button and move it slightly down */
+.submit-btn {
+    display: block;
+    width: 100%;
+    max-width: 300px; /* Adjust as needed */
+    margin: 20px auto 0; /* Moves it down */
+    padding: 12px;
+    background-color: #800080; /* Purple button */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.submit-btn:hover {
+    background-color: #6a006a;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .signup-container {
+        width: 90%;
+    }
+}
