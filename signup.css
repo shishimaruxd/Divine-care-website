@@ -1,8 +1,15 @@
-/* Center the form container and move it 50px down */
+/* Reset default margin, padding, and box-sizing */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Center the form container and move it slightly down */
 .signup-container {
     width: 100%;
     max-width: 400px;
-    margin: 150px auto; /* Increased from 100px to 150px */
+    margin: 100px auto; /* Adjusted to match localhost */
     padding: 20px;
     background: white;
     border-radius: 10px;
@@ -29,12 +36,12 @@
     border-radius: 5px;
 }
 
-/* Center the Sign Up button and move it slightly down */
+/* Center the Sign-Up button */
 .submit-btn {
     display: block;
     width: 100%;
-    max-width: 300px; /* Adjust as needed */
-    margin: 20px auto 0; /* Moves it down */
+    max-width: 300px; /* Limit width */
+    margin: 20px auto 0; /* Centered */
     padding: 12px;
     background-color: #800080; /* Purple button */
     color: white;
@@ -47,6 +54,61 @@
 
 .submit-btn:hover {
     background-color: #6a006a;
+}
+
+/* Separator line */
+.separator {
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0;
+    font-weight: bold;
+    color: #aaa;
+}
+
+.separator::before, 
+.separator::after {
+    content: "";
+    flex: 1;
+    border-bottom: 1px solid #ccc;
+    margin: 0 10px;
+}
+
+/* Google Button Styling */
+.google-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 10px;
+    width: 100%;
+    max-width: 300px; /* Ensures consistent button size */
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: 0.3s;
+    color: black;
+    margin: 0 auto; /* Centers button */
+}
+
+/* Google Button Image */
+.google-btn img {
+    width: 20px; /* Fixed size */
+    height: auto;
+    margin-right: 10px;
+}
+
+/* Hover effect */
+.google-btn:hover {
+    background-color: #f0f0f0;
+}
+
+/* Apply global font */
+body {
+    font-family: 'Roboto', sans-serif;
 }
 
 /* Responsive Design */
