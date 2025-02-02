@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Divine Care</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="signup.css">
+    <!-- Google API Script -->
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+</head>
+<body>
+
+    <!-- Load Header -->
+    <div id="header-container"></div>
+
+    <div class="signup-container">
+        <form id="signupForm" onsubmit="return handleFormSubmit(event)">
+            <label for="name">Full Name</label>
+            <input type="text" id="name" placeholder="Enter your full name" required>
+
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="Enter your email" required>
+
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="Create a password" required>
+
+            <button type="submit" class="submit-btn">Sign Up</button>
+
+            <div class="separator">or</div>
+
+            <!-- Keep the original Google Sign-In Button -->
+            <button type="button" class="google-btn" onclick="handleGoogleSignIn()">
+                <img src="google-icon.png" alt="Google Logo">
+                Continue with Google
+            </button>
+
+        </form>
+    </div>
+
+    <script>
+        fetch("header.html")
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("header-container").innerHTML = data;
+                document.getElementById("signup-btn").style.display = "none"; // Hide signup button on signup page
+            });
+
+        // Function to handle Google Sign-In click
+        function handleGoogleSignIn() {
+            // Trigger Google login process when the button is clicked
+            gapi.auth2.getAuthInstance().signIn().then(function(googleUser) {
+                var profile = googleUser.getBasicProfile();
+                console.log("ID: " + profile.getId());
+                console.log("Name: " + profile.getName());
+                console.log("Email: " + profile.getEmail());
+
+                // Send the data to your server or handle user login/registration
+                var id_token = googleUser.getAuthResponse().id_token;
+                console.log("ID Token: " + id_token);
+
+                // Redirect to dashboard or another page after successful sign-in
+                window.location.href = "/dashboard"; // Change this URL to where you want to redirect after successful sign-in
+            });
+        }
+
+        // Function to handle the regular form submission if Google login is not used
+        function handleFormSubmit(event) {
+            event.preventDefault(); // Prevent form submission
+
+            // Check if all fields are filled in
+            var name = document.getElementById("name").value;
+            var email = document.getElementById("email").value;
+            var password = document.getElementById("password").value;
+
+            if (name && email && password) {
+                // Submit form via AJAX or normal submit if needed
+                console.log("Form Submitted!");
+                // You can submit the form here via AJAX or a regular form post
+            } else {
+                alert("Please fill out all fields.");
+            }
+        }
+
+        // Initialize Google API Client with your OAuth Client ID
+        gapi.load('auth2', function() {
+            gapi.auth2.init({
+                client_id: '66232472978-ddehm12g4in7ccqhqvat3n5ef7u0vfgp.apps.googleusercontent.com' // Replace with your actual Client ID
+            });
+        });
+    </script>
+
+</body>
+</html>

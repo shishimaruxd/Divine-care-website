@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Divine Care - Psychology Clinic</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Include the Google API script -->
+    <script src="https://apis.google.com/js/platform.js" async defer></script> <!-- Google API Script -->
+</head>
+<body>
+
+    <!-- Load Header -->
+    <div id="header-container"></div>
+
+    <section id="home" class="hero">
+        <h2>Welcome to Divine Care</h2>
+        <p>Your well-being is our priority. We provide expert psychological counseling and therapy.</p>
+    </section>
+
+    <section id="services">
+        <h2>Our Services</h2>
+        <ul>
+            <li>Individual Therapy</li>
+            <li>Couples Counseling</li>
+            <li>Stress & Anxiety Management</li>
+            <li>Child & Adolescent Therapy</li>
+        </ul>
+    </section>
+
+    <section id="contact">
+        <h2>Contact Us</h2>
+        <form id="contactForm">
+            <input type="text" id="name" placeholder="Your Name" required>
+            <input type="email" id="email" placeholder="Your Email" required>
+            <textarea id="message" placeholder="Your Message" required></textarea>
+            <button type="submit">Send Message</button>
+        </form>
+
+        <!-- Google Sign-In Button -->
+        <div class="g-signin2" data-onsuccess="onSignIn"></div>
+    </section>
+
+    <footer>
+        <p>© 2025 Divine Care. All Rights Reserved. 
+            <a href="privacy.html" style="margin-left: 10px; color: #800080; text-decoration: none; font-weight: bold;">Privacy Policy</a> |
+            <a href="terms.html" style="margin-left: 10px; color: #800080; text-decoration: none; font-weight: bold;">Terms of Service</a>
+        </p>
+    </footer>
+
+    <script>
+        fetch("header.html")
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("header-container").innerHTML = data;
+            });
+
+        // Function to handle successful Google Sign-In
+        function onSignIn(googleUser) {
+            var profile = googleUser.getBasicProfile();
+            console.log("ID: " + profile.getId());
+            console.log("Name: " + profile.getName());
+            console.log("Email: " + profile.getEmail());
+
+            // Redirect to homepage or user dashboard after successful sign-in
+            window.location.href = "/dashboard"; // Change the redirect URL as needed
+        }
+
+        // Initialize Google API Client with your OAuth Client ID
+        gapi.load('auth2', function() {
+            gapi.auth2.init({
+                client_id: '66232472978-ddehm12g4in7ccqhqvat3n5ef7u0vfgp.apps.googleusercontent.com' // Replace with your actual Client ID
+            });
+        });
+    </script>
+
+</body>
+</html>
