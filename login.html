@@ -9,6 +9,49 @@
 
     <!-- Google Sign-In API -->
     <script src="https://apis.google.com/js/platform.js" async defer></script>
+
+    <!-- Firebase SDKs -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-analytics.js";
+
+        // Firebase Config
+        const firebaseConfig = {
+            apiKey: "AIzaSyDs8oIj-KqhHAi5fQLOXyt5bRPR49QYzzY",
+            authDomain: "divine-care-5c116.firebaseapp.com",
+            projectId: "divine-care-5c116",
+            storageBucket: "divine-care-5c116.firebasestorage.app",
+            messagingSenderId: "151917979280",
+            appId: "1:151917979280:web:5a2dcab40cae970fc21a15",
+            measurementId: "G-WJECLFQP23"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const analytics = getAnalytics(app);
+
+        // Handle login form submission
+        document.getElementById("loginForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+
+            signInWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    // Successfully signed in
+                    const user = userCredential.user;
+                    console.log("User logged in:", user);
+                    window.location.href = "/dashboard"; // Redirect to dashboard
+                })
+                .catch((error) => {
+                    console.error("Error signing in:", error.message);
+                    alert("Login failed. Please check your credentials.");
+                });
+        });
+    </script>
 </head>
 <body>
 
