@@ -9,9 +9,54 @@
     <!-- Google API Script -->
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDs8oIj-KqhHAi5fQLOXyt5bRPR49QYzzY",
+            authDomain: "divine-care-5c116.firebaseapp.com",
+            projectId: "divine-care-5c116",
+            storageBucket: "divine-care-5c116.firebasestorage.app",
+            messagingSenderId: "151917979280",
+            appId: "1:151917979280:web:5a2dcab40cae970fc21a15",
+            measurementId: "G-WJECLFQP23"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Function to handle Google Sign-In click
+        window.handleGoogleSignIn = function() {
+            const provider = new GoogleAuthProvider();
+            signInWithPopup(auth, provider)
+                .then((result) => {
+                    const user = result.user;
+                    console.log("User signed in with Google:", user);
+                    // Store user data in Firestore (optional)
+                    setDoc(doc(db, "users", user.uid), {
+                        name: user.displayName,
+                        email: user.email,
+                        createdAt: new Date(),
+                    })
+                    .then(() => {
+                        console.log("User data saved to Firestore.");
+                        // Redirect to dashboard or home page
+                        window.location.href = "/dashboard"; // Adjust the redirect as needed
+                    })
+                    .catch((error) => {
+                        console.error("Error saving user data:", error);
+                    });
+                })
+                .catch((error) => {
+                    console.error("Error during Google sign-in:", error.message);
+                });
+        };
+    </script>
 </head>
 <body>
 
@@ -50,38 +95,6 @@
                 document.getElementById("signup-btn").style.display = "none"; // Hide signup button on signup page
             });
 
-        // Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyDs8oIj-KqhHAi5fQLOXyt5bRPR49QYzzY",
-            authDomain: "divine-care-5c116.firebaseapp.com",
-            projectId: "divine-care-5c116",
-            storageBucket: "divine-care-5c116.firebasestorage.app",
-            messagingSenderId: "151917979280",
-            appId: "1:151917979280:web:5a2dcab40cae970fc21a15",
-            measurementId: "G-WJECLFQP23"
-        };
-
-        // Initialize Firebase
-        const app = firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const db = firebase.firestore();
-
-        // Function to handle Google Sign-In click
-        function handleGoogleSignIn() {
-            const provider = new firebase.auth.GoogleAuthProvider();
-            auth.signInWithPopup(provider)
-                .then((result) => {
-                    const user = result.user;
-                    console.log("User signed in with Google:", user);
-                    // Redirect or store user data in Firestore as needed
-                    window.location.href = "/dashboard"; // Replace with your desired redirect
-                })
-                .catch((error) => {
-                    console.error("Error during Google sign-in:", error.message);
-                    alert("Error during Google sign-in: " + error.message);  // Show error in case of failure
-                });
-        }
-
         // Function to handle the regular form submission if Google login is not used
         function handleFormSubmit(event) {
             event.preventDefault(); // Prevent form submission
@@ -93,17 +106,18 @@
 
             if (name && email && password) {
                 // Create user with email and password
-                auth.createUserWithEmailAndPassword(email, password)
+                const auth = getAuth();
+                createUserWithEmailAndPassword(auth, email, password)
                     .then((userCredential) => {
-                        // User successfully signed up
                         const user = userCredential.user;
                         console.log("User created:", user);
 
-                        // Store additional user data in Firestore (optional)
-                        db.collection("users").doc(user.uid).set({
+                        // Store additional user data in Firestore
+                        const db = getFirestore();
+                        setDoc(doc(db, "users", user.uid), {
                             name: name,
                             email: email,
-                            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                            createdAt: new Date(),
                         })
                         .then(() => {
                             console.log("User data saved to Firestore.");
@@ -122,13 +136,6 @@
                 alert("Please fill out all fields.");
             }
         }
-
-        // Initialize Google API Client with your OAuth Client ID
-        gapi.load('auth2', function() {
-            gapi.auth2.init({
-                client_id: '66232472978-ddehm12g4in7ccqhqvat3n5ef7u0vfgp.apps.googleusercontent.com' // Replace with your actual Client ID
-            });
-        });
     </script>
 
 </body>
