@@ -8,6 +8,10 @@
     <link rel="stylesheet" href="signup.css">
     <!-- Google API Script -->
     <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
 </head>
 <body>
 
@@ -29,7 +33,7 @@
 
             <div class="separator">or</div>
 
-            <!-- Keep the original Google Sign-In Button -->
+            <!-- Google Sign-In Button -->
             <button type="button" class="google-btn" onclick="handleGoogleSignIn()">
                 <img src="google-icon.png" alt="Google Logo">
                 Continue with Google
@@ -46,37 +50,74 @@
                 document.getElementById("signup-btn").style.display = "none"; // Hide signup button on signup page
             });
 
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDs8oIj-KqhHAi5fQLOXyt5bRPR49QYzzY",
+            authDomain: "divine-care-5c116.firebaseapp.com",
+            projectId: "divine-care-5c116",
+            storageBucket: "divine-care-5c116.firebasestorage.app",
+            messagingSenderId: "151917979280",
+            appId: "1:151917979280:web:5a2dcab40cae970fc21a15",
+            measurementId: "G-WJECLFQP23"
+        };
+
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
         // Function to handle Google Sign-In click
         function handleGoogleSignIn() {
-            // Trigger Google login process when the button is clicked
-            gapi.auth2.getAuthInstance().signIn().then(function(googleUser) {
-                var profile = googleUser.getBasicProfile();
-                console.log("ID: " + profile.getId());
-                console.log("Name: " + profile.getName());
-                console.log("Email: " + profile.getEmail());
-
-                // Send the data to your server or handle user login/registration
-                var id_token = googleUser.getAuthResponse().id_token;
-                console.log("ID Token: " + id_token);
-
-                // Redirect to dashboard or another page after successful sign-in
-                window.location.href = "/dashboard"; // Change this URL to where you want to redirect after successful sign-in
-            });
+            const provider = new firebase.auth.GoogleAuthProvider();
+            auth.signInWithPopup(provider)
+                .then((result) => {
+                    const user = result.user;
+                    console.log("User signed in with Google:", user);
+                    // Redirect or store user data in Firestore as needed
+                    window.location.href = "/dashboard"; // Replace with your desired redirect
+                })
+                .catch((error) => {
+                    console.error("Error during Google sign-in:", error.message);
+                    alert("Error during Google sign-in: " + error.message);  // Show error in case of failure
+                });
         }
 
         // Function to handle the regular form submission if Google login is not used
         function handleFormSubmit(event) {
             event.preventDefault(); // Prevent form submission
 
-            // Check if all fields are filled in
+            // Get form values
             var name = document.getElementById("name").value;
             var email = document.getElementById("email").value;
             var password = document.getElementById("password").value;
 
             if (name && email && password) {
-                // Submit form via AJAX or normal submit if needed
-                console.log("Form Submitted!");
-                // You can submit the form here via AJAX or a regular form post
+                // Create user with email and password
+                auth.createUserWithEmailAndPassword(email, password)
+                    .then((userCredential) => {
+                        // User successfully signed up
+                        const user = userCredential.user;
+                        console.log("User created:", user);
+
+                        // Store additional user data in Firestore (optional)
+                        db.collection("users").doc(user.uid).set({
+                            name: name,
+                            email: email,
+                            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                        })
+                        .then(() => {
+                            console.log("User data saved to Firestore.");
+                            // Redirect to login or home page
+                            window.location.href = "/login.html"; // Change as needed
+                        })
+                        .catch((error) => {
+                            console.error("Error saving user data:", error);
+                        });
+                    })
+                    .catch((error) => {
+                        console.error("Error signing up:", error.message);
+                        alert("Error: " + error.message);
+                    });
             } else {
                 alert("Please fill out all fields.");
             }
