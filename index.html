@@ -5,12 +5,82 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Divine Care - Psychology Clinic</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Include the Google API script -->
-    <script src="https://apis.google.com/js/platform.js" async defer></script> <!-- Google API Script -->
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+    
+    <!-- Google API Script -->
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    
+    <!-- Firebase v9+ SDK -->
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+        import { getFirestore, collection, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Sign-Up Function
+        document.addEventListener('DOMContentLoaded', function () {
+            const signupForm = document.getElementById('signup-form');
+            if (signupForm) {
+                signupForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const name = document.getElementById('signup-name').value;
+                    const email = document.getElementById('signup-email').value;
+                    const password = document.getElementById('signup-password').value;
+
+                    try {
+                        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                        const user = userCredential.user;
+
+                        // Save user data in Firestore
+                        await setDoc(doc(db, "users", user.uid), {
+                            name: name,
+                            email: email,
+                            createdAt: serverTimestamp()
+                        });
+
+                        alert('Sign Up successful!');
+                        window.location.href = "https://shishimaruxd.github.io/Divine-care-website/";
+                    } catch (error) {
+                        alert('Error during sign-up: ' + error.message);
+                    }
+                });
+            }
+        });
+
+        // Login Function
+        document.addEventListener('DOMContentLoaded', function () {
+            const loginForm = document.getElementById('login-form');
+            if (loginForm) {
+                loginForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const email = document.getElementById('login-email').value;
+                    const password = document.getElementById('login-password').value;
+
+                    try {
+                        await signInWithEmailAndPassword(auth, email, password);
+                        alert('Login successful!');
+                        window.location.href = "https://shishimaruxd.github.io/Divine-care-website/";
+                    } catch (error) {
+                        alert('Error during login: ' + error.message);
+                    }
+                });
+            }
+        });
+    </script>
 </head>
 <body>
 
@@ -60,65 +130,6 @@
                 document.getElementById("header-container").innerHTML = data;
             });
 
-        // Firebase configuration and initialization
-        const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_AUTH_DOMAIN",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_STORAGE_BUCKET",
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-            appId: "YOUR_APP_ID",
-            measurementId: "YOUR_MEASUREMENT_ID"
-        };
-
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const db = firebase.firestore();
-
-        // Sign Up function
-        document.getElementById('signup-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const name = document.getElementById('signup-name').value;
-            const email = document.getElementById('signup-email').value;
-            const password = document.getElementById('signup-password').value;
-
-            try {
-                // Create new user
-                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-                const user = userCredential.user;
-
-                // Save user data to Firestore
-                await db.collection('users').doc(user.uid).set({
-                    name: name,
-                    email: email,
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
-
-                alert('Sign Up successful!');
-                window.location.href = '/'; // Redirect to home page after successful signup
-            } catch (error) {
-                alert('Error during sign-up: ' + error.message);
-            }
-        });
-
-        // Login function
-        document.getElementById('login-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('login-email').value;
-            const password = document.getElementById('login-password').value;
-
-            try {
-                // Authenticate user
-                await auth.signInWithEmailAndPassword(email, password);
-
-                alert('Login successful!');
-                window.location.href = '/'; // Redirect to home page after successful login
-            } catch (error) {
-                alert('Error during login: ' + error.message);
-            }
-        });
-
         // Google Sign-In function
         function onSignIn(googleUser) {
             var profile = googleUser.getBasicProfile();
@@ -126,28 +137,28 @@
             console.log("Name: " + profile.getName());
             console.log("Email: " + profile.getEmail());
 
-            // Save user info in localStorage or sessionStorage
+            // Save user info in localStorage
             localStorage.setItem("userName", profile.getName());
             localStorage.setItem("userEmail", profile.getEmail());
 
-            // Redirect to homepage after successful sign-in
-            window.location.href = "/"; // Redirect to homepage or user dashboard
+            // Redirect to homepage after sign-in
+            window.location.href = "https://shishimaruxd.github.io/Divine-care-website/";
         }
 
-        // Initialize Google API Client with your OAuth Client ID
+        // Initialize Google API Client
         gapi.load('auth2', function() {
             gapi.auth2.init({
-                client_id: 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com' // Replace with your actual Client ID
+                client_id: 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com'
             });
         });
 
-        // Display the user info on the page (for example, in the header)
+        // Display user info
         window.onload = function() {
             const userName = localStorage.getItem("userName");
             if (userName) {
                 document.getElementById("user-name").innerText = userName; // Ensure you have an element with id="user-name"
             }
-        }
+        };
     </script>
 
 </body>
