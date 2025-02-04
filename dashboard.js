@@ -1,28 +1,13 @@
-document.addEventListener("DOMContentLoaded", function() {
+// Assuming you store the user's name in localStorage upon successful login
+document.addEventListener("DOMContentLoaded", function () {
+    // Set the username from localStorage (or default to 'User ID' if not set)
+    let userName = localStorage.getItem('userName') || 'User ID';
+    document.getElementById('userName').textContent = userName;
 
-    const profileBtn = document.getElementById('profileBtn');
-    const dropdownMenu = document.getElementById('dropdownMenu');
-    const userNameDisplay = document.getElementById('userName');
-    const logoutButton = document.getElementById('logoutBtn');
-
-    // Simulate a user logged in, retrieve the user name (example)
-    const user = localStorage.getItem('userLoggedIn');  // This can be replaced by real user info
-    if (user) {
-        userNameDisplay.textContent = user;  // Set the user's name
-    }
-
-    // Toggle dropdown visibility on profile button click
-    profileBtn.addEventListener('click', function() {
-        dropdownMenu.classList.toggle('show');
+    // Handle logout
+    document.getElementById('logoutBtn').addEventListener('click', function () {
+        // Clear the stored username and redirect to the main index.html page
+        localStorage.removeItem('userName');
+        window.location.href = 'index.html'; // Redirect to the home page
     });
-
-    // Logout functionality
-    logoutButton.addEventListener('click', function() {
-        // Clear session data
-        localStorage.removeItem('userLoggedIn');
-
-        // Redirect to the homepage (index.html)
-        window.location.href = 'index.html';
-    });
-
 });
