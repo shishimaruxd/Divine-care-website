@@ -3,59 +3,92 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Divine Care</title>
-    <link rel="stylesheet" href="dashboard.css">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Link to your CSS file -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
 </head>
 <body>
-
-    <!-- Header Section -->
-    <header class="header">
+    <!-- Header -->
+    <div class="header">
         <div class="logo">
-            <img src="DIVINE CARE.png" alt="Divine Care Logo">
+            <img src="DIVINE CARE.png" alt="Logo">
         </div>
-        <nav class="nav-menu">
+        <div class="nav-menu">
             <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#">Services</a></li>
-                <li><a href="#">Contact</a></li>
-            </ul>
-        </nav>
-        <div class="user-profile">
-            <button class="profile-btn">User ID</button>
-            <ul class="dropdown-menu">
-                <li><a href="#">Settings</a></li>
-                <li><a href="#" id="logoutBtn">Log Out</a></li>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="contact.html">Contact</a></li>
             </ul>
         </div>
-    </header>
+
+        <!-- User Profile Dropdown -->
+        <div class="user-profile">
+            <button class="profile-btn" id="userBtn">Hello, <span id="userName">User</span></button>
+            <ul class="dropdown-menu" id="dropdownMenu">
+                <li><a href="account-settings.html">Account Settings</a></li>
+                <li><button id="logoutBtn">Log Out</button></li>
+            </ul>
+        </div>
+    </div>
 
     <!-- Hero Section -->
-    <section class="hero">
+    <div class="hero">
         <h1>Welcome to Your Dashboard</h1>
-        <p>Manage your rehabilitation services and more.</p>
-    </section>
+        <p>Manage your account, view your services, and much more.</p>
+    </div>
 
-    <!-- Services Section -->
-    <section class="services">
-        <h2>Our Services</h2>
-        <ul>
-            <li>Psychological Counseling</li>
-            <li>Rehabilitation Programs</li>
-            <li>Individual & Group Therapy</li>
-        </ul>
-    </section>
+    <!-- Other sections like services, etc. -->
 
-    <!-- Contact Form Section -->
-    <section class="contact">
-        <h2>Get in Touch</h2>
-        <form action="submit_form.php" method="post">
-            <input type="text" name="name" placeholder="Your Name" required>
-            <input type="email" name="email" placeholder="Your Email" required>
-            <textarea name="message" placeholder="Your Message" rows="5" required></textarea>
-            <button type="submit">Send Message</button>
-        </form>
-    </section>
+    <script src="firebase-config.js"></script> <!-- Link to your Firebase config -->
+    <script>
+        // Firebase initialization
+        const firebaseConfig = {
+            apiKey: "your-api-key",
+            authDomain: "your-auth-domain",
+            projectId: "your-project-id",
+            storageBucket: "your-storage-bucket",
+            messagingSenderId: "your-sender-id",
+            appId: "your-app-id"
+        };
 
-    <script src="dashboard.js"></script>
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // Elements for user data
+        const userBtn = document.getElementById('userBtn');
+        const userName = document.getElementById('userName');
+        const dropdownMenu = document.getElementById('dropdownMenu');
+        const logoutBtn = document.getElementById('logoutBtn');
+
+        // Check if user is logged in
+        firebase.auth().onAuthStateChanged(user => {
+            if (user) {
+                // Display user's name in the button
+                userName.textContent = user.displayName || user.email;
+
+                // Toggle dropdown menu visibility
+                userBtn.addEventListener('click', () => {
+                    dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+                });
+
+                // Log out functionality
+                logoutBtn.addEventListener('click', () => {
+                    auth.signOut().then(() => {
+                        // Redirect to main page after log out
+                        window.location.href = 'index.html';
+                    }).catch(error => {
+                        console.error('Error signing out: ', error);
+                    });
+                });
+            } else {
+                // If no user is logged in, redirect to login page
+                window.location.href = 'login.html';
+            }
+        });
+    </script>
 </body>
 </html>
