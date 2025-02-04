@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard | Divine Care</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+</head>
+<body>
+    <header>
+        <h2>Welcome to Your Dashboard</h2>
+        <button id="logout">Logout</button>
+    </header>
+
+    <main>
+        <h3 id="user-name">Loading...</h3>
+        <p>Email: <span id="user-email"></span></p>
+    </main>
+
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+
+        // Check if user is logged in
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                document.getElementById("user-name").innerText = "Hello, " + (user.displayName || "User");
+                document.getElementById("user-email").innerText = user.email;
+            } else {
+                // Redirect to login if not logged in
+                window.location.href = "login.html";
+            }
+        });
+
+        // Logout function
+        document.getElementById("logout").addEventListener("click", () => {
+            auth.signOut().then(() => {
+                window.location.href = "login.html"; // Redirect to login after logout
+            });
+        });
+    </script>
+</body>
+</html>
