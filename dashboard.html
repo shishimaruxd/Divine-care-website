@@ -3,45 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Divine Care</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Divine Care - Psychology Clinic</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Include the Google API script -->
+    <script src="https://apis.google.com/js/platform.js" async defer></script> <!-- Google API Script -->
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
 </head>
-<body>
+<body class="dashboard-page"> <!-- Added class for dashboard-specific styling -->
 
-    <header class="header">
-        <div class="logo">
-            <img src="logo.png" alt="Divine Care">
-        </div>
-        <nav class="nav-menu">
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="services.html">Services</a></li>
-                <li><a href="gallery.html">Gallery</a></li>
-                <li><a href="contact.html">Contact</a></li>
-            </ul>
-        </nav>
+    <!-- Load Header -->
+    <div id="header-container"></div>
 
-        <!-- User Profile Dropdown -->
-        <div class="user-profile">
-            <button class="profile-btn dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown">
-                <span id="username">User</span> ▼
-            </button>
-            <ul class="dropdown-menu dropdown-menu-end">
-                <li><a class="dropdown-item" href="settings.html">Account Settings</a></li>
-                <li><a class="dropdown-item logout-btn" href="#">Logout</a></li>
-            </ul>
-        </div>
-    </header>
-
-    <section class="hero">
-        <h1>Welcome to Divine Care</h1>
+    <section id="home" class="hero">
+        <h2>Welcome to Divine Care</h2>
         <p>Your well-being is our priority. We provide expert psychological counseling and therapy.</p>
     </section>
 
-    <section class="services">
+    <section id="services">
         <h2>Our Services</h2>
         <ul>
             <li>Individual Therapy</li>
@@ -51,28 +33,122 @@
         </ul>
     </section>
 
-    <section class="contact">
+    <section id="contact">
         <h2>Contact Us</h2>
-        <form>
-            <input type="text" placeholder="Your Name">
-            <input type="email" placeholder="Your Email">
-            <textarea placeholder="Your Message"></textarea>
+        <form id="contactForm">
+            <input type="text" id="name" placeholder="Your Name" required>
+            <input type="email" id="email" placeholder="Your Email" required>
+            <textarea id="message" placeholder="Your Message" required></textarea>
             <button type="submit">Send Message</button>
         </form>
+
+        <!-- Google Sign-In Button -->
+        <div class="g-signin2" data-onsuccess="onSignIn"></div>
     </section>
 
+    <footer>
+        <p>© 2025 Divine Care. All Rights Reserved. 
+            <a href="privacy.html" style="margin-left: 10px; color: #800080; text-decoration: none; font-weight: bold;">Privacy Policy</a> |
+            <a href="terms.html" style="margin-left: 10px; color: #800080; text-decoration: none; font-weight: bold;">Terms of Service</a>
+        </p>
+    </footer>
+
     <script>
-        // Set username dynamically
-        document.addEventListener("DOMContentLoaded", function() {
-            let userName = localStorage.getItem("userName") || "User";
-            document.getElementById("username").innerText = userName;
+        // Fetch and insert header
+        fetch("header.html")
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("header-container").innerHTML = data;
+            });
+
+        // Firebase configuration and initialization
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID",
+            measurementId: "YOUR_MEASUREMENT_ID"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // Sign Up function
+        document.getElementById('signup-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('signup-name').value;
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+
+            try {
+                // Create new user
+                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                const user = userCredential.user;
+
+                // Save user data to Firestore
+                await db.collection('users').doc(user.uid).set({
+                    name: name,
+                    email: email,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                alert('Sign Up successful!');
+                window.location.href = '/'; // Redirect to home page after successful signup
+            } catch (error) {
+                alert('Error during sign-up: ' + error.message);
+            }
         });
 
-        // Logout function
-        document.querySelector(".logout-btn").addEventListener("click", function() {
-            localStorage.removeItem("userName");
-            window.location.href = "index.html"; // Redirect to main page
+        // Login function
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+
+            try {
+                // Authenticate user
+                await auth.signInWithEmailAndPassword(email, password);
+
+                alert('Login successful!');
+                window.location.href = '/'; // Redirect to home page after successful login
+            } catch (error) {
+                alert('Error during login: ' + error.message);
+            }
         });
+
+        // Google Sign-In function
+        function onSignIn(googleUser) {
+            var profile = googleUser.getBasicProfile();
+            console.log("ID: " + profile.getId());
+            console.log("Name: " + profile.getName());
+            console.log("Email: " + profile.getEmail());
+
+            // Save user info in localStorage or sessionStorage
+            localStorage.setItem("userName", profile.getName());
+            localStorage.setItem("userEmail", profile.getEmail());
+
+            // Redirect to homepage after successful sign-in
+            window.location.href = "/"; // Redirect to homepage or user dashboard
+        }
+
+        // Initialize Google API Client with your OAuth Client ID
+        gapi.load('auth2', function() {
+            gapi.auth2.init({
+                client_id: 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com' // Replace with your actual Client ID
+            });
+        });
+
+        // Display the user info on the page (for example, in the header)
+        window.onload = function() {
+            const userName = localStorage.getItem("userName");
+            if (userName) {
+                document.getElementById("user-name").innerText = userName; // Ensure you have an element with id="user-name"
+            }
+        }
     </script>
 
 </body>
