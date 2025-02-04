@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="style.css">
     
     <!-- Include the Google API script -->
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script src="https://apis.google.com/js/platform.js" async defer></script> <!-- Google API Script -->
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
@@ -76,6 +76,49 @@
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.firestore();
+
+        // Sign Up function
+        document.getElementById('signup-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('signup-name').value;
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+
+            try {
+                // Create new user
+                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                const user = userCredential.user;
+
+                // Save user data to Firestore
+                await db.collection('users').doc(user.uid).set({
+                    name: name,
+                    email: email,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                alert('Sign Up successful!');
+                window.location.href = '/'; // Redirect to home page after successful signup
+            } catch (error) {
+                alert('Error during sign-up: ' + error.message);
+            }
+        });
+
+        // Login function
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+
+            try {
+                // Authenticate user
+                await auth.signInWithEmailAndPassword(email, password);
+
+                alert('Login successful!');
+                window.location.href = '/'; // Redirect to home page after successful login
+            } catch (error) {
+                alert('Error during login: ' + error.message);
+            }
+        });
 
         // Google Sign-In function
         function onSignIn(googleUser) {
