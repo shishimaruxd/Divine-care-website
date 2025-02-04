@@ -60,10 +60,13 @@ body {
     padding: 10px;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
 .user-profile:hover .dropdown-menu {
     display: block;
+    opacity: 1;
 }
 
 /* Hero Section */
@@ -115,15 +118,79 @@ body {
 .contact input, .contact textarea {
     width: 80%;
     max-width: 400px;
-    padding: 10px;
+    padding: 12px;
     margin: 10px 0;
     border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
 }
 
 .contact button {
     background: #6a0dad;
     color: white;
-    padding: 10px 15px;
+    padding: 12px 18px;
     border: none;
+    border-radius: 4px;
     cursor: pointer;
+    font-size: 16px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .nav-menu ul {
+        flex-direction: column;
+    }
+
+    .nav-menu ul li {
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+
+    .hero h1 {
+        font-size: 28px;
+    }
+
+    .hero p {
+        font-size: 16px;
+    }
+
+    .services ul {
+        padding: 0 20px;
+    }
+}
+
+/* Button Hover Effects */
+.profile-btn:hover, .contact button:hover {
+    background-color: #8a2be2; /* Light purple */
+    color: white;
+    transition: background-color 0.3s ease;
+}
+
+.nav-menu ul li a:hover {
+    color: #dcdcdc;
+    text-decoration: underline;
+}
+
+/* Dropdown Transition */
+.dropdown-menu {
+    position: absolute;
+    top: 40px;
+    right: 0;
+    background: white;
+    list-style: none;
+    padding: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.user-profile:hover .dropdown-menu {
+    display: block;
+    opacity: 1;
 }
