@@ -1,196 +1,69 @@
-/* General Styles */
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f5f5f5;
-}
-
-/* Header */
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #6a0dad;
-    padding: 15px 20px;
-    color: white;
-}
-
-.logo img {
-    height: 50px;
-}
-
-/* Navigation */
-.nav-menu ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-}
-
-.nav-menu ul li {
-    margin-right: 20px;
-}
-
-.nav-menu ul li a {
-    text-decoration: none;
-    color: white;
-    font-weight: bold;
-}
-
-/* User Profile Dropdown */
+/* User Profile */
 .user-profile {
     position: relative;
+    display: inline-block;
 }
 
 .profile-btn {
-    background: white;
-    color: black;
-    padding: 8px 12px;
-    border: none;
+    background: #fff;
+    color: #333;
+    padding: 10px 20px;
+    border: 2px solid #6a0dad;
+    border-radius: 5px;
     cursor: pointer;
+    font-weight: bold;
+    text-transform: capitalize;
 }
 
 .dropdown-menu {
-    position: absolute;
-    top: 40px;
-    right: 0;
-    background: white;
-    list-style: none;
-    padding: 10px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     display: none;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.user-profile:hover .dropdown-menu {
-    display: block;
-    opacity: 1;
-}
-
-/* Hero Section */
-.hero {
-    text-align: center;
-    padding: 50px 20px;
-    background: white;
-}
-
-.hero h1 {
-    font-size: 36px;
-    color: #333;
-}
-
-.hero p {
-    font-size: 18px;
-    color: #666;
-}
-
-/* Services Section */
-.services {
-    background: #ffffff;
-    padding: 40px 20px;
-    text-align: center;
-}
-
-.services h2 {
-    font-size: 28px;
-    color: #333;
-}
-
-.services ul {
+    position: absolute;
+    top: 45px;
+    right: 0;
+    background-color: white;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    width: 200px;
     list-style: none;
     padding: 0;
 }
 
-.services li {
-    font-size: 18px;
-    margin: 10px 0;
+.dropdown-menu.show {
+    display: block;
 }
 
-/* Contact Form */
-.contact {
+.dropdown-menu li {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.dropdown-menu li:last-child {
+    border-bottom: none;
+}
+
+.dropdown-menu li a,
+.dropdown-menu li button {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: #6a0dad;
     text-align: center;
-    padding: 40px 20px;
-    background: #ffffff;
+    cursor: pointer;
 }
 
-.contact input, .contact textarea {
-    width: 80%;
-    max-width: 400px;
-    padding: 12px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 16px;
+.dropdown-menu li a:hover,
+.dropdown-menu li button:hover {
+    background-color: #f1f1f1;
 }
 
-.contact button {
-    background: #6a0dad;
-    color: white;
-    padding: 12px 18px;
+#logoutBtn {
+    background: transparent;
     border: none;
-    border-radius: 4px;
+    color: #6a0dad;
     cursor: pointer;
     font-size: 16px;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-    .header {
-        flex-direction: column;
-        text-align: center;
-    }
-
-    .nav-menu ul {
-        flex-direction: column;
-    }
-
-    .nav-menu ul li {
-        margin-right: 0;
-        margin-bottom: 10px;
-    }
-
-    .hero h1 {
-        font-size: 28px;
-    }
-
-    .hero p {
-        font-size: 16px;
-    }
-
-    .services ul {
-        padding: 0 20px;
-    }
-}
-
-/* Button Hover Effects */
-.profile-btn:hover, .contact button:hover {
-    background-color: #8a2be2; /* Light purple */
-    color: white;
-    transition: background-color 0.3s ease;
-}
-
-.nav-menu ul li a:hover {
-    color: #dcdcdc;
-    text-decoration: underline;
-}
-
-/* Dropdown Transition */
-.dropdown-menu {
-    position: absolute;
-    top: 40px;
-    right: 0;
-    background: white;
-    list-style: none;
-    padding: 10px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    display: none;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.user-profile:hover .dropdown-menu {
-    display: block;
-    opacity: 1;
+#logoutBtn:hover {
+    background-color: #f1f1f1;
 }
