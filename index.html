@@ -5,14 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Divine Care - Psychology Clinic</title>
     <link rel="stylesheet" href="style.css">
+    
     <!-- Include the Google API script -->
-    <script src="https://apis.google.com/js/platform.js" async defer></script> <!-- Google API Script -->
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
 </head>
-<body>
+<body class="dashboard-page"> <!-- Added class for dashboard-specific styling -->
 
     <!-- Load Header -->
     <div id="header-container"></div>
@@ -76,57 +77,6 @@
         const auth = firebase.auth();
         const db = firebase.firestore();
 
-        // Sign Up function
-        document.addEventListener('DOMContentLoaded', function () {
-            const signUpForm = document.getElementById('signup-form');
-            if (signUpForm) {
-                signUpForm.addEventListener('submit', async (e) => {
-                    e.preventDefault();
-                    const name = document.getElementById('signup-name').value;
-                    const email = document.getElementById('signup-email').value;
-                    const password = document.getElementById('signup-password').value;
-
-                    try {
-                        // Create new user
-                        const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-                        const user = userCredential.user;
-
-                        // Save user data to Firestore
-                        await db.collection('users').doc(user.uid).set({
-                            name: name,
-                            email: email,
-                            createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                        });
-
-                        alert('Sign Up successful!');
-                        window.location.href = 'dashboard.html'; // Redirect to dashboard after signup
-                    } catch (error) {
-                        alert('Error during sign-up: ' + error.message);
-                    }
-                });
-            }
-
-            // Login function
-            const loginForm = document.getElementById('login-form');
-            if (loginForm) {
-                loginForm.addEventListener('submit', async (e) => {
-                    e.preventDefault();
-                    const email = document.getElementById('login-email').value;
-                    const password = document.getElementById('login-password').value;
-
-                    try {
-                        // Authenticate user
-                        await auth.signInWithEmailAndPassword(email, password);
-
-                        alert('Login successful!');
-                        window.location.href = 'dashboard.html'; // Redirect to dashboard after login
-                    } catch (error) {
-                        alert('Error during login: ' + error.message);
-                    }
-                });
-            }
-        });
-
         // Google Sign-In function
         function onSignIn(googleUser) {
             var profile = googleUser.getBasicProfile();
@@ -138,8 +88,8 @@
             localStorage.setItem("userName", profile.getName());
             localStorage.setItem("userEmail", profile.getEmail());
 
-            // Redirect to dashboard after successful sign-in
-            window.location.href = "dashboard.html";
+            // Redirect to homepage after successful sign-in
+            window.location.href = "/"; // Redirect to homepage or user dashboard
         }
 
         // Initialize Google API Client with your OAuth Client ID
