@@ -3,153 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Divine Care - Psychology Clinic</title>
-    <link rel="stylesheet" href="style.css">
-    
-    <!-- Include the Google API script -->
-    <script src="https://apis.google.com/js/platform.js" async defer></script> <!-- Google API Script -->
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+    <title>Dashboard - Divine Care</title>
+    <link rel="stylesheet" href="dashboard.css">
 </head>
-<body class="dashboard-page"> <!-- Added class for dashboard-specific styling -->
+<body>
 
-    <!-- Load Header -->
-    <div id="header-container"></div>
+    <!-- Header Section -->
+    <header class="header">
+        <div class="logo">
+            <img src="logo.png" alt="Divine Care Logo">
+        </div>
+        <nav class="nav-menu">
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Services</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </nav>
+        <div class="user-profile">
+            <button class="profile-btn">User ID</button>
+            <ul class="dropdown-menu">
+                <li><a href="#">Settings</a></li>
+                <li><a href="#" id="logoutBtn">Log Out</a></li>
+            </ul>
+        </div>
+    </header>
 
-    <section id="home" class="hero">
-        <h2>Welcome to Divine Care</h2>
-        <p>Your well-being is our priority. We provide expert psychological counseling and therapy.</p>
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Welcome to Your Dashboard</h1>
+        <p>Manage your rehabilitation services and more.</p>
     </section>
 
-    <section id="services">
+    <!-- Services Section -->
+    <section class="services">
         <h2>Our Services</h2>
         <ul>
-            <li>Individual Therapy</li>
-            <li>Couples Counseling</li>
-            <li>Stress & Anxiety Management</li>
-            <li>Child & Adolescent Therapy</li>
+            <li>Psychological Counseling</li>
+            <li>Rehabilitation Programs</li>
+            <li>Individual & Group Therapy</li>
         </ul>
     </section>
 
-    <section id="contact">
-        <h2>Contact Us</h2>
-        <form id="contactForm">
-            <input type="text" id="name" placeholder="Your Name" required>
-            <input type="email" id="email" placeholder="Your Email" required>
-            <textarea id="message" placeholder="Your Message" required></textarea>
+    <!-- Contact Form Section -->
+    <section class="contact">
+        <h2>Get in Touch</h2>
+        <form action="submit_form.php" method="post">
+            <input type="text" name="name" placeholder="Your Name" required>
+            <input type="email" name="email" placeholder="Your Email" required>
+            <textarea name="message" placeholder="Your Message" rows="5" required></textarea>
             <button type="submit">Send Message</button>
         </form>
-
-        <!-- Google Sign-In Button -->
-        <div class="g-signin2" data-onsuccess="onSignIn"></div>
     </section>
 
-    <footer>
-        <p>© 2025 Divine Care. All Rights Reserved. 
-            <a href="privacy.html" style="margin-left: 10px; color: #800080; text-decoration: none; font-weight: bold;">Privacy Policy</a> |
-            <a href="terms.html" style="margin-left: 10px; color: #800080; text-decoration: none; font-weight: bold;">Terms of Service</a>
-        </p>
-    </footer>
-
-    <script>
-        // Fetch and insert header
-        fetch("header.html")
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById("header-container").innerHTML = data;
-            });
-
-        // Firebase configuration and initialization
-        const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_AUTH_DOMAIN",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_STORAGE_BUCKET",
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-            appId: "YOUR_APP_ID",
-            measurementId: "YOUR_MEASUREMENT_ID"
-        };
-
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const db = firebase.firestore();
-
-        // Sign Up function
-        document.getElementById('signup-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const name = document.getElementById('signup-name').value;
-            const email = document.getElementById('signup-email').value;
-            const password = document.getElementById('signup-password').value;
-
-            try {
-                // Create new user
-                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-                const user = userCredential.user;
-
-                // Save user data to Firestore
-                await db.collection('users').doc(user.uid).set({
-                    name: name,
-                    email: email,
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
-
-                alert('Sign Up successful!');
-                window.location.href = '/'; // Redirect to home page after successful signup
-            } catch (error) {
-                alert('Error during sign-up: ' + error.message);
-            }
-        });
-
-        // Login function
-        document.getElementById('login-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('login-email').value;
-            const password = document.getElementById('login-password').value;
-
-            try {
-                // Authenticate user
-                await auth.signInWithEmailAndPassword(email, password);
-
-                alert('Login successful!');
-                window.location.href = '/'; // Redirect to home page after successful login
-            } catch (error) {
-                alert('Error during login: ' + error.message);
-            }
-        });
-
-        // Google Sign-In function
-        function onSignIn(googleUser) {
-            var profile = googleUser.getBasicProfile();
-            console.log("ID: " + profile.getId());
-            console.log("Name: " + profile.getName());
-            console.log("Email: " + profile.getEmail());
-
-            // Save user info in localStorage or sessionStorage
-            localStorage.setItem("userName", profile.getName());
-            localStorage.setItem("userEmail", profile.getEmail());
-
-            // Redirect to homepage after successful sign-in
-            window.location.href = "/"; // Redirect to homepage or user dashboard
-        }
-
-        // Initialize Google API Client with your OAuth Client ID
-        gapi.load('auth2', function() {
-            gapi.auth2.init({
-                client_id: 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com' // Replace with your actual Client ID
-            });
-        });
-
-        // Display the user info on the page (for example, in the header)
-        window.onload = function() {
-            const userName = localStorage.getItem("userName");
-            if (userName) {
-                document.getElementById("user-name").innerText = userName; // Ensure you have an element with id="user-name"
-            }
-        }
-    </script>
-
+    <script src="dashboard.js"></script>
 </body>
 </html>
