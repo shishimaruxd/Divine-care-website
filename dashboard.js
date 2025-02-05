@@ -1,31 +1,24 @@
 document.addEventListener("DOMContentLoaded", function () {
     const userDropdown = document.getElementById("userDropdown");
-    const dropdownMenu = document.querySelector(".dropdown-menu");
-    const logoutBtn = document.getElementById("logoutBtn");
 
-    // Fetch authenticated user from Firebase
+    // Fetch user data from Firebase Auth
     firebase.auth().onAuthStateChanged((user) => {
         if (user) {
-            userDropdown.textContent = user.displayName || "User"; // Show actual user name
+            // User is signed in
+            userDropdown.textContent = user.displayName || "User"; // Use Google name
         } else {
+            // User is not signed in
             userDropdown.textContent = "Log In";
+            userDropdown.addEventListener("click", () => {
+                window.location.href = "login.html"; // Redirect to login page
+            });
         }
     });
 
-    userDropdown.addEventListener("click", function () {
-        dropdownMenu.classList.toggle("show");
-    });
-
-    logoutBtn.addEventListener("click", function () {
+    // Log out function
+    document.getElementById("logoutBtn").addEventListener("click", () => {
         firebase.auth().signOut().then(() => {
-            alert("Logged out successfully!");
-            window.location.href = "index.html"; // Redirect to home page
+            window.location.href = "index.html"; // Redirect to home page after logout
         });
-    });
-
-    document.addEventListener("click", function (e) {
-        if (!userDropdown.contains(e.target) && !dropdownMenu.contains(e.target)) {
-            dropdownMenu.classList.remove("show");
-        }
     });
 });
