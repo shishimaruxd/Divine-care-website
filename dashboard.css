@@ -1,40 +1,34 @@
-/* General Styles */
+/* General Reset */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f5f5f5;
+    box-sizing: border-box;
 }
 
-/* Header */
+/* Header Styling */
 .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #6a0dad;
-    padding: 15px 20px;
-    color: white;
+    background-color: white;
+    padding: 10px 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .logo img {
     height: 50px;
 }
 
-/* Navigation */
 .nav-menu ul {
     list-style: none;
-    margin: 0;
-    padding: 0;
     display: flex;
-}
-
-.nav-menu ul li {
-    margin-right: 20px;
+    gap: 20px;
 }
 
 .nav-menu ul li a {
     text-decoration: none;
-    color: white;
+    color: black;
     font-weight: bold;
 }
 
@@ -44,65 +38,64 @@ body {
 }
 
 .profile-btn {
-    background: white;
-    color: black;
+    background-color: white;
+    border: 1px solid black;
     padding: 8px 12px;
-    border: none;
     cursor: pointer;
 }
 
 .dropdown-menu {
+    display: none;
     position: absolute;
-    top: 40px;
     right: 0;
     background: white;
+    border: 1px solid #ddd;
     list-style: none;
+    padding: 10px 0;
+    width: 150px;
+}
+
+.dropdown-menu li {
     padding: 10px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    display: none;
+    text-align: center;
+}
+
+.dropdown-menu li a {
+    text-decoration: none;
+    color: black;
 }
 
 .user-profile:hover .dropdown-menu {
     display: block;
 }
 
-.dropdown-menu li {
-    margin-bottom: 10px;
-}
-
-.dropdown-menu li a {
-    text-decoration: none;
-    color: #6a0dad;
-    font-weight: bold;
-}
-
 /* Hero Section */
 .hero {
+    background-color: #e6f2ff;
     text-align: center;
-    padding: 50px 20px;
-    background: white;
+    padding: 60px 20px;
 }
 
 .hero h1 {
-    font-size: 36px;
-    color: #333;
+    font-size: 28px;
+    font-weight: bold;
 }
 
 .hero p {
     font-size: 18px;
-    color: #666;
+    color: gray;
 }
 
 /* Services Section */
 .services {
-    background: #ffffff;
-    padding: 40px 20px;
+    background-color: #f2f2f2;
+    padding: 50px 20px;
     text-align: center;
 }
 
 .services h2 {
-    font-size: 28px;
-    color: #333;
+    font-size: 24px;
+    font-weight: bold;
 }
 
 .services ul {
@@ -115,25 +108,30 @@ body {
     margin: 10px 0;
 }
 
-/* Contact Form */
+/* Contact Section */
 .contact {
+    background: white;
+    padding: 40px;
     text-align: center;
-    padding: 40px 20px;
-    background: #ffffff;
 }
 
-.contact input, .contact textarea {
-    width: 80%;
+.contact form {
     max-width: 400px;
+    margin: auto;
+}
+
+.contact input,
+.contact textarea {
+    width: 100%;
     padding: 10px;
     margin: 10px 0;
-    border: 1px solid #ccc;
+    border: 1px solid #ddd;
 }
 
 .contact button {
-    background: #6a0dad;
+    background: blue;
     color: white;
-    padding: 10px 15px;
+    padding: 10px;
     border: none;
     cursor: pointer;
 }
