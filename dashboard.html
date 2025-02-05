@@ -6,7 +6,7 @@
     <title>Dashboard - Divine Care</title>
     <link rel="stylesheet" href="dashboard.css">
 
-    <!-- Firebase SDK -->
+    <!-- Firebase SDK (Ensure this is loaded first) -->
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
 
@@ -22,7 +22,7 @@
         };
 
         // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
+        const app = firebase.initializeApp(firebaseConfig);
     </script>
 </head>
 <body>
@@ -49,35 +49,7 @@
         </div>
     </header>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <h1>Welcome to Divine Care</h1>
-        <p>Your well-being is our priority. We provide expert psychological counseling and therapy.</p>
-    </section>
-
-    <!-- Services Section -->
-    <section class="services">
-        <h2>Our Services</h2>
-        <ul>
-            <li>Individual Therapy</li>
-            <li>Couples Counseling</li>
-            <li>Stress & Anxiety Management</li>
-            <li>Child & Adolescent Therapy</li>
-        </ul>
-    </section>
-
-    <!-- Contact Section -->
-    <section class="contact">
-        <h2>Contact Us</h2>
-        <form>
-            <input type="text" placeholder="Your Name" required>
-            <input type="email" placeholder="Your Email" required>
-            <textarea placeholder="Your Message" rows="5" required></textarea>
-            <button type="submit">Send Message</button>
-        </form>
-    </section>
-
-    <!-- Dashboard JavaScript -->
+    <!-- Dashboard JavaScript (Load after Firebase SDK) -->
     <script src="dashboard.js"></script>
 
 </body>
