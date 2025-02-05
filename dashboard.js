@@ -1,13 +1,21 @@
 document.addEventListener("DOMContentLoaded", function () {
     const userDropdown = document.getElementById("userDropdown");
+    const logoutBtn = document.getElementById("logoutBtn");
 
-    // Check Firebase Auth state
-    firebase.auth().onAuthStateChanged((user) => {
+    // Check if Firebase is initialized
+    if (!firebase.apps.length) {
+        console.error("Firebase is not initialized. Check your config.");
+        return;
+    }
+
+    // Firebase authentication
+    const auth = firebase.auth();
+
+    // Check user authentication status
+    auth.onAuthStateChanged((user) => {
         if (user) {
-            // ✅ If user is signed in, set their Google Name
-            userDropdown.textContent = user.displayName || "User"; // Fetch actual Google name
+            userDropdown.textContent = user.displayName || "User";
         } else {
-            // ❌ If not signed in, show "Log In" instead of wrong name
             userDropdown.textContent = "Log In";
             userDropdown.addEventListener("click", () => {
                 window.location.href = "login.html"; // Redirect to login page
@@ -15,10 +23,12 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // ✅ Logout functionality
-    document.getElementById("logoutBtn").addEventListener("click", () => {
-        firebase.auth().signOut().then(() => {
-            window.location.href = "index.html"; // Redirect to homepage
+    // Logout functionality
+    logoutBtn.addEventListener("click", () => {
+        auth.signOut().then(() => {
+            window.location.href = "index.html"; // Redirect to home page after logout
+        }).catch((error) => {
+            console.error("Error logging out:", error);
         });
     });
 });
