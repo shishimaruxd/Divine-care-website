@@ -2,13 +2,12 @@ document.addEventListener("DOMContentLoaded", function () {
     const userDropdown = document.getElementById("userDropdown");
     const logoutBtn = document.getElementById("logoutBtn");
 
-    // Check if Firebase is initialized
-    if (!firebase.apps.length) {
-        console.error("Firebase is not initialized. Check your config.");
+    // Ensure Firebase is available
+    if (typeof firebase === "undefined") {
+        console.error("Firebase is not loaded. Check if SDK scripts are included correctly.");
         return;
     }
 
-    // Firebase authentication
     const auth = firebase.auth();
 
     // Check user authentication status
