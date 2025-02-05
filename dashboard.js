@@ -1,13 +1,29 @@
-// Assuming you store the user's name in localStorage upon successful login
 document.addEventListener("DOMContentLoaded", function () {
-    // Set the username from localStorage (or default to 'User ID' if not set)
-    let userName = localStorage.getItem('userName') || 'User ID';
-    document.getElementById('userName').textContent = userName;
+    const userDropdown = document.getElementById("userDropdown");
+    const dropdownMenu = document.querySelector(".dropdown-menu");
+    const logoutBtn = document.getElementById("logoutBtn");
 
-    // Handle logout
-    document.getElementById('logoutBtn').addEventListener('click', function () {
-        // Clear the stored username and redirect to the main index.html page
-        localStorage.removeItem('userName');
-        window.location.href = 'index.html'; // Redirect to the home page
+    // Simulated user data from Firebase Authentication
+    const user = {
+        displayName: "John Doe",
+    };
+
+    if (user) {
+        userDropdown.textContent = user.displayName; // Show user name
+    }
+
+    userDropdown.addEventListener("click", function () {
+        dropdownMenu.classList.toggle("show");
+    });
+
+    logoutBtn.addEventListener("click", function () {
+        alert("Logging out...");
+        window.location.href = "index.html"; // Redirect to home page
+    });
+
+    document.addEventListener("click", function (e) {
+        if (!userDropdown.contains(e.target) && !dropdownMenu.contains(e.target)) {
+            dropdownMenu.classList.remove("show");
+        }
     });
 });
