@@ -3,22 +3,24 @@ document.addEventListener("DOMContentLoaded", function () {
     const dropdownMenu = document.querySelector(".dropdown-menu");
     const logoutBtn = document.getElementById("logoutBtn");
 
-    // Simulated user data from Firebase Authentication
-    const user = {
-        displayName: "John Doe",
-    };
-
-    if (user) {
-        userDropdown.textContent = user.displayName; // Show user name
-    }
+    // Fetch authenticated user from Firebase
+    firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+            userDropdown.textContent = user.displayName || "User"; // Show actual user name
+        } else {
+            userDropdown.textContent = "Log In";
+        }
+    });
 
     userDropdown.addEventListener("click", function () {
         dropdownMenu.classList.toggle("show");
     });
 
     logoutBtn.addEventListener("click", function () {
-        alert("Logging out...");
-        window.location.href = "index.html"; // Redirect to home page
+        firebase.auth().signOut().then(() => {
+            alert("Logged out successfully!");
+            window.location.href = "index.html"; // Redirect to home page
+        });
     });
 
     document.addEventListener("click", function (e) {
