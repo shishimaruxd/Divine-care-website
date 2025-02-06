@@ -1,11 +1,3 @@
-/* General Styles */
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f4;
-}
-
 /* Header */
 .header {
     display: flex;
@@ -16,17 +8,19 @@ body {
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-.logo img {
-    height: 50px;
+/* Navigation Menu */
+.nav-menu {
+    flex: 1;
+    display: flex;
+    justify-content: center;
 }
 
-/* Navigation */
 .nav-menu ul {
     list-style: none;
     display: flex;
-    gap: 25px;
-    margin: 0;
+    gap: 30px;
     padding: 0;
+    margin: 0;
 }
 
 .nav-menu ul li {
@@ -37,11 +31,6 @@ body {
     text-decoration: none;
     color: black;
     font-weight: bold;
-    transition: 0.3s;
-}
-
-.nav-menu ul li a:hover {
-    color: purple;
 }
 
 /* Profile Button & Dropdown */
@@ -52,57 +41,38 @@ body {
 .profile-btn {
     background-color: white;
     border: 1px solid black;
-    padding: 8px 15px;
+    padding: 8px 12px;
     cursor: pointer;
     border-radius: 5px;
     font-weight: bold;
-    display: flex;
-    align-items: center;
-    gap: 5px;
+    transition: 0.3s;
 }
 
-.arrow-down {
-    font-size: 12px;
+.profile-btn:hover {
+    background-color: #f1f1f1;
 }
 
+/* Dropdown Menu */
 .dropdown-menu {
     display: none;
     position: absolute;
-    top: 45px;
+    top: 40px;
     right: 0;
     background: white;
-    border-radius: 5px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    border: 1px solid #ddd;
     list-style: none;
     padding: 10px;
     width: 180px;
-    text-align: left;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
 }
 
 .dropdown-menu li {
     padding: 10px;
-    transition: 0.3s;
-}
-
-.dropdown-menu li a {
-    text-decoration: none;
-    color: black;
-    font-weight: bold;
-    display: block;
+    font-size: 14px;
+    cursor: pointer;
 }
 
 .dropdown-menu li:hover {
-    background-color: #f0f0f0;
-}
-
-/* Show dropdown on button click */
-.user-profile.active .dropdown-menu {
-    display: block;
-}
-
-/* Welcome Section */
-.welcome {
-    text-align: center;
-    margin-top: 50px;
-    padding: 20px;
+    background-color: #f1f1f1;
 }
