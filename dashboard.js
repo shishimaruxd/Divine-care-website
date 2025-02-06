@@ -3,24 +3,31 @@ import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/fi
 document.addEventListener("DOMContentLoaded", function () {
     const userDropdown = document.getElementById("userDropdown");
     const logoutBtn = document.getElementById("logoutBtn");
-    const dropdownMenu = document.getElementById("dropdownMenu");
+    const hamburgerMenu = document.getElementById("hamburgerMenu");
+    const sidePanel = document.getElementById("sidePanel");
 
-    // Firebase Auth
     const auth = getAuth();
 
     // Check user authentication status
     onAuthStateChanged(auth, (user) => {
         if (user) {
-            userDropdown.innerHTML = `${user.displayName} ▼`;
+            userDropdown.innerHTML = `${user.displayName}`;
         } else {
             userDropdown.innerHTML = "Log In";
             userDropdown.onclick = () => window.location.href = "login.html";
         }
     });
 
-    // Toggle dropdown menu
-    userDropdown.addEventListener("click", function () {
-        dropdownMenu.style.display = dropdownMenu.style.display === "block" ? "none" : "block";
+    // Toggle Side Panel
+    hamburgerMenu.addEventListener("click", function () {
+        sidePanel.classList.toggle("active");
+    });
+
+    // Close Side Panel when clicking outside
+    document.addEventListener("click", function (event) {
+        if (!sidePanel.contains(event.target) && !hamburgerMenu.contains(event.target)) {
+            sidePanel.classList.remove("active");
+        }
     });
 
     // Logout functionality
@@ -30,12 +37,5 @@ document.addEventListener("DOMContentLoaded", function () {
         }).catch((error) => {
             console.error("Error logging out:", error);
         });
-    });
-
-    // Hide dropdown when clicking outside
-    document.addEventListener("click", function (event) {
-        if (!userDropdown.contains(event.target) && !dropdownMenu.contains(event.target)) {
-            dropdownMenu.style.display = "none";
-        }
     });
 });
