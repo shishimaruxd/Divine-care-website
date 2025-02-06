@@ -1,33 +1,41 @@
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+
 document.addEventListener("DOMContentLoaded", function () {
     const userDropdown = document.getElementById("userDropdown");
     const logoutBtn = document.getElementById("logoutBtn");
+    const dropdownMenu = document.getElementById("dropdownMenu");
 
-    // Ensure Firebase is available
-    if (typeof firebase === "undefined") {
-        console.error("Firebase is not loaded. Check if SDK scripts are included correctly.");
-        return;
-    }
-
-    const auth = firebase.auth();
+    // Firebase Auth
+    const auth = getAuth();
 
     // Check user authentication status
-    auth.onAuthStateChanged((user) => {
+    onAuthStateChanged(auth, (user) => {
         if (user) {
-            userDropdown.textContent = user.displayName || "User";
+            userDropdown.innerHTML = `${user.displayName} ▼`;
         } else {
-            userDropdown.textContent = "Log In";
-            userDropdown.addEventListener("click", () => {
-                window.location.href = "login.html"; // Redirect to login page
-            });
+            userDropdown.innerHTML = "Log In";
+            userDropdown.onclick = () => window.location.href = "login.html";
         }
+    });
+
+    // Toggle dropdown menu
+    userDropdown.addEventListener("click", function () {
+        dropdownMenu.style.display = dropdownMenu.style.display === "block" ? "none" : "block";
     });
 
     // Logout functionality
     logoutBtn.addEventListener("click", () => {
-        auth.signOut().then(() => {
+        signOut(auth).then(() => {
             window.location.href = "index.html"; // Redirect to home page after logout
         }).catch((error) => {
             console.error("Error logging out:", error);
         });
+    });
+
+    // Hide dropdown when clicking outside
+    document.addEventListener("click", function (event) {
+        if (!userDropdown.contains(event.target) && !dropdownMenu.contains(event.target)) {
+            dropdownMenu.style.display = "none";
+        }
     });
 });
