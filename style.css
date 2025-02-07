@@ -1,0 +1,184 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+/* Navigation Taskbar */
+header {
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+    position: relative;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Logo */
+.logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo img {
+    width: 120px; /* Adjust size as needed */
+    height: auto;
+}
+
+/* Hamburger Menu */
+.hamburger {
+    position: absolute;
+    left: 15px;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+/* Sidebar Menu */
+#sidebar {
+    position: fixed;
+    top: 0;
+    left: -250px;
+    width: 250px;
+    height: 100%;
+    background-color: white;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+    transition: left 0.3s ease-in-out;
+    padding-top: 60px;
+}
+
+/* Sidebar Menu Items (Centered) */
+#sidebar ul {
+    list-style: none;
+    padding: 0;
+    text-align: center; /* Center align the text */
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+}
+
+/* Show Class for Smooth Transition */
+#sidebar ul.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Sidebar Items */
+#sidebar ul li {
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+    transition: background 0.3s ease-in-out, transform 0.2s ease-in-out;
+}
+
+/* Hover Effect */
+#sidebar ul li a {
+    text-decoration: none;
+    color: black;
+    font-size: 18px;
+    display: block;
+    transition: background 0.3s ease, color 0.3s ease, transform 0.2s ease-in-out;
+}
+
+#sidebar ul li:hover {
+    background-color: #D3D3D3;
+    color: white;
+    transform: scale(1.05);
+}
+
+/* Show Sidebar */
+#sidebar.active {
+    left: 0;
+}
+
+/* Hide Sidebar */
+#sidebar:not(.active) {
+    left: -250px;
+}
+
+/* Welcome Section */
+.welcome {
+    background-color: #D9ECFF;
+    padding: 50px 20px;
+}
+
+/* Our Services Section */
+.services {
+    background-color: #F5F5F5;
+    padding: 40px 20px;
+}
+
+/* Book Appointment Button */
+.appointment-container {
+    text-align: center;
+    margin: 30px 0;
+}
+
+.appointment-btn {
+    background-color: #FF5733;
+    color: white;
+    font-size: 18px;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out;
+}
+
+.appointment-btn:hover {
+    background-color: #E64A19;
+}
+
+/* Contact Section */
+.contact {
+    background-color: white;
+    padding: 40px 20px;
+}
+
+/* Contact Form */
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+input, textarea {
+    width: 80%;
+    max-width: 400px;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+textarea {
+    height: 100px;
+    resize: none;
+}
+
+/* Send Button */
+button {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    width: 80%;
+    max-width: 400px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    input, textarea, button {
+        width: 90%;
+    }
+}
