@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Appointment - Divine Care</title>
+    <link rel="stylesheet" href="appointment.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body>
+
+    <div class="appointment-container">
+        <h2><u>Book Your Appointment</u></h2>
+        
+        <form id="appointmentForm">
+            <label for="fullName">Full Name</label>
+            <input type="text" id="fullName" name="entry.1407013296" placeholder="Enter your full name" required>
+
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="entry.1164294347" placeholder="Enter your email" required>
+
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" name="entry.1741900643" placeholder="Enter your phone number" required>
+
+            <label for="date">Preferred Date</label>
+            <input type="date" id="date" name="entry.995021763" required>
+
+            <label for="service">Select Service</label>
+            <select id="service" name="entry.2078450573" required>
+                <option value="" disabled selected>Select a service</option>
+                <option value="stress and anxiety management">Stress & Anxiety Management</option>
+                <option value="relationship counseling">Relationship Counseling</option>
+                <option value="career guidance">Career Guidance</option>
+            </select>
+
+            <label for="mode">Select Mode</label>
+            <select id="mode" name="entry.635336510" required>
+                <option value="" disabled selected>Select Mode</option>
+                <option value="Online">Online</option>
+                <option value="Offline">Offline</option>
+            </select>
+
+            <label for="message">Additional Message</label>
+            <textarea id="message" name="entry.758809599" placeholder="Enter any additional details"></textarea>
+
+            <button type="submit">Confirm Appointment</button>
+        </form>
+    </div>
+
+    <script defer src="script.js"></script>
+
+</body>
+</html>
