@@ -1,21 +1,46 @@
+// Import and Initialize Firebase
+const firebaseConfig = {
+    apiKey: "AIzaSyC8950UoLWJ_-mL2h8qXrAfjV6KLtSYano",
+    authDomain: "divine-appointements.firebaseapp.com",
+    projectId: "divine-appointements",
+    storageBucket: "divine-appointements.appspot.com",
+    messagingSenderId: "352266934809",
+    appId: "1:352266934809:web:3e99cd5fac7e044586a888",
+    measurementId: "G-B9RPR118N2"
+};
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+// Form Submission Handler
 document.getElementById("appointmentForm").addEventListener("submit", function(event) {
     event.preventDefault(); // Prevent default form submission
 
-    let formData = new FormData(this); // Get form data
+    // Get Form Data
+    let fullName = document.getElementById("fullName").value;
+    let email = document.getElementById("email").value;
+    let phone = document.getElementById("phone").value;
+    let date = document.getElementById("date").value;
+    let service = document.getElementById("service").value;
+    let mode = document.getElementById("mode").value;
+    let message = document.getElementById("message").value;
 
-    // Google Form URL (replace 'viewform' with 'formResponse')
-    let googleFormURL = "https://docs.google.com/forms/d/e/1FAIpQLSf4wFQRLsAVvOUrnhMAU2ZmiYHarl3RyUXSU5r-KMd8Fm6GHw/formResponse";
-
-    fetch(googleFormURL, {
-        method: "POST",
-        mode: "no-cors",  // Ensures no CORS issue
-        body: formData
-    }).then(response => {
-        alert("✅Thankyou for Booking Appointment with Divine Care! You will get confirmation mail under 30 minutes on given mail Id"); // Show success alert
-        
-        window.location.href = "index.html"; // Redirect to home page after alert
-    }).catch(error => {
-        alert("Error submitting form. Please Contact +918957604340 CALL US OR WHATSAPP US");
+    // Save Data to Firebase Firestore
+    db.collection("appointments").add({
+        fullName: fullName,
+        email: email,
+        phone: phone,
+        date: date,
+        service: service,
+        mode: mode,
+        message: message,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    }).then(() => {
+        alert("✅ Thank you for booking an appointment with Divine Care! You will receive a confirmation email within 30 minutes.");
+        window.location.href = "index.html"; // Redirect to home page
+    }).catch((error) => {
+        alert("⚠️ Error submitting form. Please contact +918957604340 (Call or WhatsApp).");
         console.error("Error:", error);
     });
 });
