@@ -1,5 +1,5 @@
 // Initialize Firebase
-const firebaseConfig = {
+var firebaseConfig = {
     apiKey: "AIzaSyC8950UoLWJ_-mL2h8qXrAfjV6KLtSYano",
     authDomain: "divine-appointements.firebaseapp.com",
     projectId: "divine-appointements",
@@ -10,7 +10,7 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+var db = firebase.firestore();
 
 // Form Submission Handler
 document.getElementById("appointmentForm").addEventListener("submit", function(event) {
