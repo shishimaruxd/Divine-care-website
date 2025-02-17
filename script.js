@@ -1,4 +1,4 @@
-// Initialize Firebase
+// ✅ Use Firebase v8 (No import/export needed)
 var firebaseConfig = {
     apiKey: "AIzaSyC8950UoLWJ_-mL2h8qXrAfjV6KLtSYano",
     authDomain: "divine-appointements.firebaseapp.com",
@@ -9,10 +9,11 @@ var firebaseConfig = {
     measurementId: "G-B9RPR118N2"
 };
 
+// ✅ Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 var db = firebase.firestore();
 
-// Form Submission Handler
+// ✅ Form Submission Handler
 document.getElementById("appointmentForm").addEventListener("submit", function(event) {
     event.preventDefault(); // Prevent default form submission
 
@@ -24,7 +25,7 @@ document.getElementById("appointmentForm").addEventListener("submit", function(e
     let mode = document.getElementById("mode").value;
     let message = document.getElementById("message").value;
 
-    // Save Data to Firebase Firestore
+    // ✅ Save Data to Firebase Firestore
     db.collection("appointments").add({
         fullName: fullName,
         email: email,
