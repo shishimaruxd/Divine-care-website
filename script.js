@@ -1,4 +1,4 @@
-// Import and Initialize Firebase
+// Initialize Firebase
 const firebaseConfig = {
     apiKey: "AIzaSyC8950UoLWJ_-mL2h8qXrAfjV6KLtSYano",
     authDomain: "divine-appointements.firebaseapp.com",
@@ -9,7 +9,6 @@ const firebaseConfig = {
     measurementId: "G-B9RPR118N2"
 };
 
-// Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
@@ -17,7 +16,6 @@ const db = firebase.firestore();
 document.getElementById("appointmentForm").addEventListener("submit", function(event) {
     event.preventDefault(); // Prevent default form submission
 
-    // Get Form Data
     let fullName = document.getElementById("fullName").value;
     let email = document.getElementById("email").value;
     let phone = document.getElementById("phone").value;
@@ -37,10 +35,10 @@ document.getElementById("appointmentForm").addEventListener("submit", function(e
         message: message,
         timestamp: firebase.firestore.FieldValue.serverTimestamp()
     }).then(() => {
-        alert("✅ Thank you for booking an appointment with Divine Care! You will receive a confirmation email within 30 minutes.");
-        window.location.href = "index.html"; // Redirect to home page
+        alert("✅ Thank you for Booking an Appointment with Divine Care! You will receive a confirmation email within 30 minutes.");
+        window.location.href = "index.html"; // Redirect to home
     }).catch((error) => {
-        alert("⚠️ Error submitting form. Please contact +918957604340 (Call or WhatsApp).");
+        alert("⚠️ Error submitting form. Please contact support.");
         console.error("Error:", error);
     });
 });
