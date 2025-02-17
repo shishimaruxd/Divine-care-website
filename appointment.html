@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Book Appointment - Divine Care</title>
     <link rel="stylesheet" href="appointment.css">
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
 </head>
 <body>
 
@@ -13,19 +17,19 @@
         
         <form id="appointmentForm">
             <label for="fullName">Full Name</label>
-            <input type="text" id="fullName" name="fullName" placeholder="Enter your full name" required>
+            <input type="text" id="fullName" placeholder="Enter your full name" required>
 
             <label for="email">Email Address</label>
-            <input type="email" id="email" name="email" placeholder="Enter your email" required>
+            <input type="email" id="email" placeholder="Enter your email" required>
 
             <label for="phone">Phone Number</label>
-            <input type="tel" id="phone" name="phone" placeholder="Enter your phone number" required>
+            <input type="tel" id="phone" placeholder="Enter your phone number" required>
 
             <label for="date">Preferred Date</label>
-            <input type="date" id="date" name="date" required>
+            <input type="date" id="date" required>
 
             <label for="service">Select Service</label>
-            <select id="service" name="service" required>
+            <select id="service" required>
                 <option value="" disabled selected>Select a service</option>
                 <option value="stress and anxiety management">Stress & Anxiety Management</option>
                 <option value="relationship counseling">Relationship Counseling</option>
@@ -33,22 +37,18 @@
             </select>
 
             <label for="mode">Select Mode</label>
-            <select id="mode" name="mode" required>
+            <select id="mode" required>
                 <option value="" disabled selected>Select Mode</option>
                 <option value="Online">Online</option>
                 <option value="Offline">Offline</option>
             </select>
 
             <label for="message">Additional Message</label>
-            <textarea id="message" name="message" placeholder="Enter any additional details"></textarea>
+            <textarea id="message" placeholder="Enter any additional details"></textarea>
 
             <button type="submit">Confirm Appointment</button>
         </form>
     </div>
-
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/10.7.2/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.2/firebase-firestore.js"></script>
 
     <script defer src="script.js"></script>
 
