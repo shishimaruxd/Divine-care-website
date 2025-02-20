@@ -14,7 +14,7 @@ firebase.initializeApp(firebaseConfig);
 var db = firebase.firestore();
 
 // ✅ Form Submission Handler
-document.getElementById("appointmentForm").addEventListener("submit", function(event) {
+document.getElementById("appointmentForm").addEventListener("submit", async function(event) {
     event.preventDefault(); // Prevent default form submission
 
     let fullName = document.getElementById("fullName").value;
@@ -25,21 +25,61 @@ document.getElementById("appointmentForm").addEventListener("submit", function(e
     let mode = document.getElementById("mode").value;
     let message = document.getElementById("message").value;
 
-    // ✅ Save Data to Firebase Firestore
-    db.collection("appointments").add({
-        fullName: fullName,
-        email: email,
-        phone: phone,
-        date: date,
-        service: service,
-        mode: mode,
-        message: message,
-        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-    }).then(() => {
-        alert("✅ Thank you for Booking an Appointment with Divine Care! You will receive a confirmation email within 30 minutes.");
-        window.location.href = "index.html"; // Redirect to home
-    }).catch((error) => {
-        alert("⚠️ Error submitting form. Please contact support.");
-        console.error("Error:", error);
-    });
+    // ✅ If "Online" mode is selected, proceed to PhonePe Payment
+    if (mode === "Online") {
+        let confirmPayment = confirm("You need to pay ₹500. Click OK to proceed to payment.");
+        if (confirmPayment) {
+            try {
+                // ✅ Step 1: Prepare Payment Payload
+                let payload = {
+                    merchantId: "M22RWTTZRNM3V",  // Replace with your PhonePe UAT Merchant ID
+                    transactionId: `TXN_${Date.now()}`,  // Unique Transaction ID
+                    amount: 500 * 100,  // Convert ₹ to paise
+                    callbackUrl: "https://divinecare.org.in/",
+                    mobileNumber: phone,
+                    paymentInstrument: {
+                        type: "UPI_INTENT",
+                        targetApp: "com.phonepe.app"  // Opens PhonePe App
+                    }
+                };
+
+                // ✅ Step 2: Call PhonePe API to Initiate Payment
+                let response = await fetch("https://api-preprod.phonepe.com/apis/pg-sandbox/v1/initiate", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
+                });
+
+                let data = await response.json();
+
+                // ✅ Step 3: Redirect User to PhonePe Payment Page
+                if (data.success) {
+                    window.location.href = data.data.instrumentResponse.redirectInfo.url;
+                } else {
+                    alert("⚠️ Payment Failed: " + data.message);
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                alert("⚠️ Unable to connect to PhonePe.");
+            }
+        }
+    } else {
+        // ✅ If Offline Payment, Save Data to Firebase Firestore
+        db.collection("appointments").add({
+            fullName: fullName,
+            email: email,
+            phone: phone,
+            date: date,
+            service: service,
+            mode: mode,
+            message: message,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        }).then(() => {
+            alert("✅ Successfully booked appointment. You will receive a confirmation email.");
+            window.location.href = "index.html";
+        }).catch((error) => {
+            alert("⚠️ Error submitting form.");
+            console.error("Error:", error);
+        });
+    }
 });
