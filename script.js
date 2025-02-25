@@ -13,6 +13,31 @@ var firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 var db = firebase.firestore();
 
+// ✅ PayU Credentials (Provided by You)
+const PAYU_MERCHANT_KEY = "b1n0dl";  // Your Merchant Key
+const PAYU_SALT = "vLrmUcy3mM2pLBbncMQJBsK4YOcKJ3HB";       // Your Salt Key
+const PAYU_URL = "https://secure.payu.in/_payment"; // Live URL
+
+// ✅ Function to Generate PayU Hash (SHA-512) via Firebase Cloud Function
+async function getPayUHash(txnid, amount, productinfo, firstname, email) {
+    const response = await fetch("https://your-firebase-cloud-function-url/generateHash", { // Replace with your function URL
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            key: PAYU_MERCHANT_KEY,
+            txnid: txnid,
+            amount: amount,
+            productinfo: productinfo,
+            firstname: firstname,
+            email: email,
+            salt: PAYU_SALT
+        })
+    });
+
+    const data = await response.json();
+    return data.hash;
+}
+
 // ✅ Form Submission Handler
 document.getElementById("appointmentForm").addEventListener("submit", async function(event) {
     event.preventDefault(); // Prevent default form submission
@@ -24,44 +49,45 @@ document.getElementById("appointmentForm").addEventListener("submit", async func
     let service = document.getElementById("service").value;
     let mode = document.getElementById("mode").value;
     let message = document.getElementById("message").value;
+    let amount = 500; // Fixed amount ₹500
 
-    // ✅ If "Online" mode is selected, proceed to PhonePe Payment
+    // ✅ If "Online" mode is selected, proceed to PayU Payment
     if (mode === "Online") {
         let confirmPayment = confirm("You need to pay ₹500. Click OK to proceed to payment.");
         if (confirmPayment) {
-            try {
-                // ✅ Step 1: Prepare Payment Payload
-                let payload = {
-                    merchantId: "M22RWTTZRNM3V",  // Replace with your PhonePe UAT Merchant ID
-                    transactionId: `TXN_${Date.now()}`,  // Unique Transaction ID
-                    amount: 500 * 100,  // Convert ₹ to paise
-                    callbackUrl: "https://divinecare.org.in/",
-                    mobileNumber: phone,
-                    paymentInstrument: {
-                        type: "UPI_INTENT",
-                        targetApp: "com.phonepe.app"  // Opens PhonePe App
-                    }
-                };
+            let txnid = "TXN" + Date.now(); // Unique transaction ID
 
-                // ✅ Step 2: Call PhonePe API to Initiate Payment
-                let response = await fetch("https://api-preprod.phonepe.com/apis/pg-sandbox/v1/initiate", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(payload)
-                });
+            // ✅ Step 1: Generate PayU Hash
+            let hash = await getPayUHash(txnid, amount, service, fullName, email);
 
-                let data = await response.json();
+            // ✅ Step 2: Create a Hidden Form and Submit to PayU
+            let form = document.createElement("form");
+            form.method = "POST";
+            form.action = PAYU_URL;
 
-                // ✅ Step 3: Redirect User to PhonePe Payment Page
-                if (data.success) {
-                    window.location.href = data.data.instrumentResponse.redirectInfo.url;
-                } else {
-                    alert("⚠️ Payment Failed: " + data.message);
-                }
-            } catch (error) {
-                console.error("Error:", error);
-                alert("⚠️ Unable to connect to PhonePe.");
+            let inputs = {
+                key: PAYU_MERCHANT_KEY,
+                txnid: txnid,
+                amount: amount,
+                productinfo: service,
+                firstname: fullName,
+                email: email,
+                phone: phone,
+                surl: "https://divinecare.org.in/payment-success.html",
+                furl: "https://divinecare.org.in/payment-failure.html",
+                hash: hash
+            };
+
+            for (let key in inputs) {
+                let input = document.createElement("input");
+                input.type = "hidden";
+                input.name = key;
+                input.value = inputs[key];
+                form.appendChild(input);
             }
+
+            document.body.appendChild(form);
+            form.submit();
         }
     } else {
         // ✅ If Offline Payment, Save Data to Firebase Firestore
