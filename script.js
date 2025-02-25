@@ -13,29 +13,35 @@ var firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 var db = firebase.firestore();
 
-// ✅ PayU Credentials (Provided by You)
+// ✅ PayU Credentials
 const PAYU_MERCHANT_KEY = "b1n0dl";  // Your Merchant Key
-const PAYU_SALT = "vLrmUcy3mM2pLBbncMQJBsK4YOcKJ3HB";       // Your Salt Key
+const PAYU_SALT = "vLrmUcy3mM2pLBbncMQJBsK4YOcKJ3HB"; // Your Salt Key
 const PAYU_URL = "https://secure.payu.in/_payment"; // Live URL
 
-// ✅ Function to Generate PayU Hash (SHA-512) via Firebase Cloud Function
+// ✅ Function to Generate PayU Hash via Render Deployed Service
 async function getPayUHash(txnid, amount, productinfo, firstname, email) {
-    const response = await fetch("https://your-firebase-cloud-function-url/generateHash", { // Replace with your function URL
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            key: PAYU_MERCHANT_KEY,
-            txnid: txnid,
-            amount: amount,
-            productinfo: productinfo,
-            firstname: firstname,
-            email: email,
-            salt: PAYU_SALT
-        })
-    });
+    try {
+        const response = await fetch("https://payu-hash-generator.onrender.com/generateHash", { // ✅ Updated URL
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                key: PAYU_MERCHANT_KEY,
+                txnid: txnid,
+                amount: amount,
+                productinfo: productinfo,
+                firstname: firstname,
+                email: email,
+                salt: PAYU_SALT
+            })
+        });
 
-    const data = await response.json();
-    return data.hash;
+        const data = await response.json();
+        return data.hash;
+    } catch (error) {
+        console.error("⚠️ Error generating hash:", error);
+        alert("❌ Payment error: Unable to generate hash. Please try again.");
+        return null;
+    }
 }
 
 // ✅ Form Submission Handler
@@ -59,6 +65,7 @@ document.getElementById("appointmentForm").addEventListener("submit", async func
 
             // ✅ Step 1: Generate PayU Hash
             let hash = await getPayUHash(txnid, amount, service, fullName, email);
+            if (!hash) return; // If hash generation fails, stop here.
 
             // ✅ Step 2: Create a Hidden Form and Submit to PayU
             let form = document.createElement("form");
