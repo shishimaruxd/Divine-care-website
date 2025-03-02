@@ -15,7 +15,7 @@ var db = firebase.firestore();
 
 // ✅ PayU Credentials
 const PAYU_MERCHANT_KEY = "b1n0dl";  
-const PAYU_SALT = "g13SQQHh2IOLuI6bPBjrobBbO0Qi9b6i; //
+const PAYU_SALT = "g13SQQHh2IOLuI6bPBjrobBbO0Qi9b6i"; // ✅ Fixed syntax error
 const PAYU_URL = "https://secure.payu.in/_payment"; 
 
 // ✅ Generate PayU Hash via Render Service
@@ -25,11 +25,26 @@ async function getPayUHash(txnid, amount, productinfo, firstname, email) {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ 
-                key: PAYU_MERCHANT_KEY, txnid, amount, productinfo, firstname, email, salt: PAYU_SALT 
+                key: PAYU_MERCHANT_KEY, 
+                txnid, 
+                amount, 
+                productinfo, 
+                firstname, 
+                email, 
+                salt: PAYU_SALT 
             })
         });
 
+        if (!response.ok) {
+            throw new Error(`HTTP Error: ${response.status}`);
+        }
+
         const data = await response.json();
+        
+        if (!data.hash) {
+            throw new Error("Hash generation failed. No hash returned.");
+        }
+
         return data.hash;
     } catch (error) {
         console.error("⚠️ Error generating hash:", error);
@@ -51,13 +66,21 @@ document.getElementById("appointmentForm").addEventListener("submit", async func
     let message = document.getElementById("message").value.trim();
     let amount = 500; // Fixed ₹500 amount
 
+    if (!fullName || !email || !phone || !date || !service || !mode) {
+        alert("⚠️ Please fill in all required fields.");
+        return;
+    }
+
     if (mode === "Online") {
         if (!confirm("You need to pay ₹500. Click OK to proceed to payment.")) return;
 
         let txnid = "TXN" + Date.now(); // Unique transaction ID
 
         let hash = await getPayUHash(txnid, amount, service, fullName, email);
-        if (!hash) return;
+        if (!hash) {
+            alert("❌ Payment initialization failed. Please try again.");
+            return;
+        }
 
         // ✅ Create and Submit PayU Payment Form
         let form = document.createElement("form");
@@ -65,10 +88,15 @@ document.getElementById("appointmentForm").addEventListener("submit", async func
         form.action = PAYU_URL;
 
         let payUData = {
-            key: PAYU_MERCHANT_KEY, txnid, amount, productinfo: service, 
-            firstname: fullName, email, phone, 
-            surl: "https://divinecare.org.in/payment-success.html",
-            furl: "https://divinecare.org.in/payment-failure.html",
+            key: PAYU_MERCHANT_KEY, 
+            txnid, 
+            amount, 
+            productinfo: service, 
+            firstname: fullName, 
+            email, 
+            phone, 
+            surl: "https://divinecare.org.in/payment-success.html", // Success URL
+            furl: "https://divinecare.org.in/payment-failure.html", // Failure URL
             hash
         };
 
@@ -85,7 +113,13 @@ document.getElementById("appointmentForm").addEventListener("submit", async func
     } else {
         // ✅ Save Offline Payment Data to Firebase Firestore
         db.collection("appointments").add({
-            fullName, email, phone, date, service, mode, message,
+            fullName, 
+            email, 
+            phone, 
+            date, 
+            service, 
+            mode, 
+            message,
             timestamp: firebase.firestore.FieldValue.serverTimestamp()
         }).then(() => {
             alert("✅ Appointment booked successfully! You will receive a confirmation email.");
