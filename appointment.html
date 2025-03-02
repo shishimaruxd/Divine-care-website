@@ -37,21 +37,21 @@
             <label for="service">Select Service</label>
             <select id="service" required>
                 <option value="" disabled selected>Select a service</option>
-                <option value="counseling">Counseling - ₹500</option>
-                <option value="stress_anxiety">Stress & Anxiety Management - ₹500</option>
-                <option value="relationship">Relationship Issue Counseling - ₹500</option>
-                <option value="career_guidance">Career Guidance - ₹500</option>
-                <option value="ocd">OCD Counseling - ₹500</option>
-                <option value="migraine">Migraine Therapy - ₹500</option>
-                <option value="mental_health">Mental Health Therapy - ₹700</option>
-                <option value="anxiety_treatment">Anxiety Treatment - ₹500</option>
-                <option value="behavior_issues">Behavioral Issues - ₹500</option>
-                <option value="mental_disorder">Mental Disorder Treatment - ₹500</option>
-                <option value="therapies">Therapies - Call us for pricing</option>
+                <option value="counseling" data-price="500">Counseling - ₹500</option>
+                <option value="stress_anxiety" data-price="500">Stress & Anxiety Management - ₹500</option>
+                <option value="relationship" data-price="500">Relationship Issue Counseling - ₹500</option>
+                <option value="career_guidance" data-price="500">Career Guidance - ₹500</option>
+                <option value="ocd" data-price="500">OCD Counseling - ₹500</option>
+                <option value="migraine" data-price="700">Migraine Therapy - ₹700</option>
+                <option value="mental_health" data-price="700">Mental Health Therapy - ₹700</option>
+                <option value="anxiety_treatment" data-price="600">Anxiety Treatment - ₹600</option>
+                <option value="behavior_issues" data-price="550">Behavioral Issues - ₹550</option>
+                <option value="mental_disorder" data-price="750">Mental Disorder Treatment - ₹750</option>
+                <option value="therapies" data-price="1">Therapies - Call us for pricing (₹1)</option>
             </select>
 
-            <!-- ✅ INR Pricing Information -->
-            <p><strong>Note:</strong> Service fee for all appointments is between ₹500-1000 INR.</p>
+            <!-- ✅ Dynamically Updated Pricing -->
+            <p><strong>Price: ₹<span id="selectedPrice">500</span></strong></p>
 
             <label for="mode">Select Mode</label>
             <select id="mode" required>
