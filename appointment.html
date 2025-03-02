@@ -6,9 +6,15 @@
     <title>Book Appointment - Divine Care</title>
     <link rel="stylesheet" href="appointment.css">
 
-    <!-- ✅ Use Firebase v8 (Fixes 'export' error) -->
+    <!-- ✅ Firebase v8 for Compatibility -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+
+    <!-- ✅ SEO & Performance -->
+    <meta name="description" content="Book an appointment for professional mental health counseling and therapy at Divine Care.">
+    <meta name="keywords" content="mental health, therapy, counseling, career guidance, stress management">
+    <meta name="author" content="Divine Care">
 </head>
 <body>
 
@@ -23,25 +29,25 @@
             <input type="email" id="email" placeholder="Enter your email" required>
 
             <label for="phone">Phone Number</label>
-            <input type="tel" id="phone" placeholder="Enter your phone number" required>
+            <input type="tel" id="phone" placeholder="Enter your phone number" pattern="[0-9]{10}" title="Enter a valid 10-digit phone number" required>
 
             <label for="date">Preferred Date</label>
-            <input type="date" id="date" required>
+            <input type="date" id="date" min="" required>
 
             <label for="service">Select Service</label>
             <select id="service" required>
                 <option value="" disabled selected>Select a service</option>
-                <option value="mental health therapy">Counselling - ₹500</option>
-                <option value="stress and anxiety management">Stress Counselling - ₹500</option>
-                <option value="relationship counseling">Relationship Issue Counselling - ₹500</option>
-                <option value="career guidance">Career Guidance - ₹500</option>
-                <option value="OCD counseling">OCD Counseling - ₹500</option>
-                <option value="migraine therapy">Migraine Therapy - ₹500</option>
-                <option value="mental health therapy">Mental Health Therapy - ₹700</option>
-                <option value="mental health therapy">Anxiety Treatment - ₹500</option>
-                <option value="mental health therapy">Behavioural Issues - ₹500</option>
-                <option value="mental health therapy">Mental Disorder - ₹500</option>
-                <option value="mental health therapy">Therapies - Call us for the price</option>
+                <option value="counseling">Counseling - ₹500</option>
+                <option value="stress_anxiety">Stress & Anxiety Management - ₹500</option>
+                <option value="relationship">Relationship Issue Counseling - ₹500</option>
+                <option value="career_guidance">Career Guidance - ₹500</option>
+                <option value="ocd">OCD Counseling - ₹500</option>
+                <option value="migraine">Migraine Therapy - ₹500</option>
+                <option value="mental_health">Mental Health Therapy - ₹700</option>
+                <option value="anxiety_treatment">Anxiety Treatment - ₹500</option>
+                <option value="behavior_issues">Behavioral Issues - ₹500</option>
+                <option value="mental_disorder">Mental Disorder Treatment - ₹500</option>
+                <option value="therapies">Therapies - Call us for pricing</option>
             </select>
 
             <!-- ✅ INR Pricing Information -->
@@ -62,6 +68,11 @@
     </div>
 
     <script defer src="script.js"></script>
+
+    <script>
+        // ✅ Automatically set today's date as min value
+        document.getElementById("date").min = new Date().toISOString().split("T")[0];
+    </script>
 
 </body>
 </html>
