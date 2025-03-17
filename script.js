@@ -16,7 +16,7 @@ var db = firebase.firestore();
 // ✅ PayU Credentials
 const PAYU_MERCHANT_KEY = "b1n0dl";  
 const PAYU_SALT = "g13SQQHh2IOLuI6bPBjrobBbO0Qi9b6i"; // ✅ Fixed syntax error
-const PAYU_URL = "https://secure.payu.in/_payment"; 
+const PAYU_URL = "https://pmny.in/Xry6D4hOdhpc"; 
 
 // ✅ Generate PayU Hash via Render Service
 async function getPayUHash(txnid, amount, productinfo, firstname, email) {
