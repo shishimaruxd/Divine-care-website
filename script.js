@@ -46,7 +46,7 @@ async function getPayUHash(txnid, amount, productinfo, firstname, email) {
         }
 
         return data.hash;
-    } catch (error) {
+    } catch (error) {  // ✅ This catch block now properly follows the try block
         console.error("⚠️ Error generating hash:", error);
         alert("❌ Payment error: Unable to generate hash. Please try again.");
         return null;
