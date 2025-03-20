@@ -43,7 +43,6 @@ async function getPayUHash(txnid, amount, productinfo, firstname, email) {
         
         if (!data.hash) {
             throw new Error("Hash generation failed. No hash returned.");
-        }
 
         return data.hash;
     } catch (error) {
