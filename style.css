@@ -1,0 +1,302 @@
+/* 🌟 Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background-color: #f9f9f9;
+    color: #333;
+    scroll-behavior: smooth;
+}
+
+/* 🌟 Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    padding: 15px 5%;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+/* ✅ Updated Logo */
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo img {
+    height: 60px;
+    width: auto;
+}
+
+/* Navigation Links */
+.nav-links {
+    list-style: none;
+    display: flex;
+}
+
+.nav-links li {
+    margin: 0 15px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    transition: 0.3s;
+}
+
+.nav-links a:hover {
+    color: #ff6f00;
+}
+
+/* 🌟 Rounded 'Book Now' Button */
+.book-btn {
+    background: #ff6f00;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 25px;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+.book-btn:hover {
+    background: #e65c00;
+}
+
+/* 🌟 Hero Section */
+.hero {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 100px 5%;
+    background: white;
+    min-height: 100vh;
+}
+
+.hero-content h1 {
+    font-size: 40px;
+    font-weight: bold;
+    color: #1a1a1a;
+}
+
+.hero-content p {
+    font-size: 18px;
+    margin: 15px 0;
+    color: #555;
+}
+
+/* ✅ Increased Image Size */
+.hero img {
+    width: 700px;
+    max-width: 100%;
+    border-radius: 15px;
+}
+
+/* 🌟 Services Section */
+.services {
+    text-align: center;
+    padding: 80px 5%;
+    background: #f0f0f0;
+}
+
+.services h2 {
+    font-size: 30px;
+    margin-bottom: 20px;
+}
+
+/* Updated service-boxes for 2 rows & 5 columns */
+.service-boxes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 20px;
+    justify-content: center;
+    max-width: 1000px;
+    margin: auto;
+}
+
+/* Service Box with Hover Effect */
+.service {
+    background: white;
+    padding: 20px;
+    text-align: center;
+    font-weight: bold;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.service:hover {
+    background: #ff6f00;
+    color: white;
+    transform: scale(1.05);
+}
+
+/* 🌟 Removed "Service Details" Section */
+.service-details {
+    display: none;
+}
+
+/* 🌟 Updated Contact Us Section */
+.contact {
+    text-align: center;
+    padding: 100px 5%;
+    background: #fff;
+}
+
+.contact h2 {
+    font-size: 36px;
+    font-weight: bold;
+    color: #1a1a1a;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+}
+
+.contact p {
+    font-size: 18px;
+    color: #555;
+    margin-bottom: 15px;
+}
+
+/* Email & Phone Styling */
+.contact a {
+    font-size: 20px;
+    font-weight: bold;
+    color: #007bff;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.contact a:hover {
+    color: #ff6f00;
+    text-decoration: underline;
+}
+
+/* Contact Button */
+.contact-btn {
+    background: #ff6f00;
+    color: white;
+    border: none;
+    padding: 14px 30px;
+    cursor: pointer;
+    font-size: 20px;
+    border-radius: 8px;
+    transition: 0.3s;
+    margin-top: 15px;
+    display: inline-block;
+}
+
+.contact-btn:hover {
+    background: #e65c00;
+    transform: scale(1.05);
+}
+
+/* 🌟 Footer */
+footer {
+    background: white;
+    padding: 40px 5%;
+    box-shadow: 0px -2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+/* 🌟 Appointment Form Styling */
+.appointment-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f8f8f8;
+    padding: 40px 5%;
+}
+
+.appointment-form {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    width: 100%;
+}
+
+.appointment-form h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+.appointment-form label {
+    font-weight: 600;
+    display: block;
+    margin: 10px 0 5px;
+}
+
+.appointment-form input,
+.appointment-form select,
+.appointment-form textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    margin-bottom: 15px;
+}
+
+.appointment-form textarea {
+    resize: none;
+    height: 100px;
+}
+
+.appointment-form button {
+    background: #ff6f00;
+    color: white;
+    border: none;
+    padding: 12px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 18px;
+    width: 100%;
+    transition: 0.3s;
+}
+
+.appointment-form button:hover {
+    background: #e65c00;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .appointment-form {
+        padding: 20px;
+    }
+
+    .appointment-form h2 {
+        font-size: 22px;
+    }
+
+    .appointment-form input,
+    .appointment-form select,
+    .appointment-form textarea {
+        font-size: 14px;
+    }
+
+    .appointment-form button {
+        font-size: 16px;
+    }
+}
