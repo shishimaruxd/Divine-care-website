@@ -55,20 +55,6 @@
         <button type="submit" id="confirm-btn">Confirm Appointment</button>
     </div>
 
-    <!-- ✅ Hidden PayU Form -->
-    <form id="payuForm" action="https://secure.payu.in/_payment" method="post" style="display: none;">
-        <input type="hidden" name="key" value="iQwXv8">
-        <input type="hidden" name="txnid" id="payu_txnid">
-        <input type="hidden" name="amount" id="payu_amount">
-        <input type="hidden" name="productinfo" value="Appointment">
-        <input type="hidden" name="firstname" id="payu_firstname">
-        <input type="hidden" name="email" id="payu_email">
-        <input type="hidden" name="phone" id="payu_phone">
-        <input type="hidden" name="surl" value="https://divinecarepayu.byethost10.com/success.php">
-        <input type="hidden" name="furl" value="https://divinecarepayu.byethost10.com/failure.php">
-        <input type="hidden" name="hash" id="payu_hash">
-    </form>
-
     <!-- ✅ Firebase v8 for Compatibility -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
