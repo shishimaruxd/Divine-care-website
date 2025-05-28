@@ -25,7 +25,6 @@
 
         <label for="service" class="center-label">Select Service</label>
         <select id="service" onchange="updatePrice()">
-            <option value="0">select your Service from here</option>
             <option value="500">Relationship Issue Counseling - ₹500</option>
             <option value="600">Stress Management - ₹600</option>
             <option value="700">Depression Therapy - ₹700</option>
@@ -39,7 +38,7 @@
             <option value="600">OCD Counseling - ₹600</option>
             <option value="500">Migrane Therapy - ₹500</option>
             <option value="650">Behavioral Issues - ₹650</option>
-            <option value="1">Therapies - Call us for the pricing - ₹1</option>
+            <option value="1">Therapist - Call us for the pricing - ₹1</option>
         </select>
 
         <label for="mode" class="center-label">Select Mode</label>
@@ -55,6 +54,20 @@
 
         <button type="submit" id="confirm-btn">Confirm Appointment</button>
     </div>
+
+    <!-- ✅ Hidden PayU Form -->
+    <form id="payuForm" action="https://secure.payu.in/_payment" method="post" style="display: none;">
+        <input type="hidden" name="key" value="iQwXv8">
+        <input type="hidden" name="txnid" id="payu_txnid">
+        <input type="hidden" name="amount" id="payu_amount">
+        <input type="hidden" name="productinfo" value="Appointment">
+        <input type="hidden" name="firstname" id="payu_firstname">
+        <input type="hidden" name="email" id="payu_email">
+        <input type="hidden" name="phone" id="payu_phone">
+        <input type="hidden" name="surl" value="https://divinecarepayu.byethost10.com/success.php">
+        <input type="hidden" name="furl" value="https://divinecarepayu.byethost10.com/failure.php">
+        <input type="hidden" name="hash" id="payu_hash">
+    </form>
 
     <!-- ✅ Firebase v8 for Compatibility -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
