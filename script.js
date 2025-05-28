@@ -22,7 +22,7 @@ function updatePrice() {
 }
 
 // ✅ Handle Form Submission
-document.getElementById("confirm-btn").addEventListener("click", function(event) {
+document.getElementById("confirm-btn").addEventListener("click", async function(event) {
     event.preventDefault();
 
     let fullName = document.getElementById("full-name").value.trim();
@@ -39,22 +39,64 @@ document.getElementById("confirm-btn").addEventListener("click", function(event)
         return;
     }
 
-    // ✅ Save Data to Firebase Firestore
-    db.collection("appointments").add({
-        fullName,
-        email,
-        phone,
-        date,
-        service,
-        mode,
-        message,
-        price,
-        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-    }).then(() => {
-        alert("✅ Appointment booked successfully! You will receive a confirmation email.");
-        window.location.href = "index.html";
-    }).catch(error => {
-        alert("⚠️ Error submitting form. Please try again.");
-        console.error("Error:", error);
-    });
+    // ✅ Save to Firestore
+    try {
+        await db.collection("appointments").add({
+            fullName,
+            email,
+            phone,
+            date,
+            service,
+            mode,
+            message,
+            price,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        console.log("✅ Appointment saved to Firestore.");
+    } catch (error) {
+        alert("⚠️ Error saving appointment. Please try again.");
+        console.error("Firestore Error:", error);
+        return;
+    }
+
+    // ✅ PayU Payment Integration
+    let txnid = "TXN" + Date.now();
+    let hashData = {
+        key: "iQwXv8",
+        txnid,
+        amount: price,
+        productinfo: "Appointment",
+        firstname: fullName,
+        email
+    };
+
+    try {
+        const response = await fetch("https://divinecarepayu.byethost10.com/generate_hash.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(hashData)
+        });
+
+        const result = await response.json();
+
+        if (!result.hash) {
+            alert("❌ Could not fetch payment hash. Please try again.");
+            return;
+        }
+
+        // ✅ Fill PayU Form
+        document.getElementById("payu_txnid").value = txnid;
+        document.getElementById("payu_amount").value = price;
+        document.getElementById("payu_firstname").value = fullName;
+        document.getElementById("payu_email").value = email;
+        document.getElementById("payu_phone").value = phone;
+        document.getElementById("payu_hash").value = result.hash;
+
+        // ✅ Submit to PayU
+        document.getElementById("payuForm").submit();
+
+    } catch (error) {
+        alert("❌ Error communicating with server. Try again later.");
+        console.error("Hash fetch error:", error);
+    }
 });
