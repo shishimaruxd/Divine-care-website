@@ -22,7 +22,7 @@ function updatePrice() {
 }
 
 // ✅ Handle Form Submission
-document.getElementById("confirm-btn").addEventListener("click", async function(event) {
+document.getElementById("confirm-btn").addEventListener("click", function(event) {
     event.preventDefault();
 
     let fullName = document.getElementById("full-name").value.trim();
@@ -39,64 +39,73 @@ document.getElementById("confirm-btn").addEventListener("click", async function(
         return;
     }
 
-    // ✅ Save to Firestore
-    try {
-        await db.collection("appointments").add({
+    // ✅ Save Data to Firebase Firestore
+    db.collection("appointments").add({
+        fullName,
+        email,
+        phone,
+        date,
+        service,
+        mode,
+        message,
+        price,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    }).then(() => {
+        // ✅ Redirect to PayU after Firestore save
+        redirectToPayU({
             fullName,
             email,
             phone,
-            date,
-            service,
-            mode,
-            message,
             price,
-            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            service
         });
-        console.log("✅ Appointment saved to Firestore.");
-    } catch (error) {
-        alert("⚠️ Error saving appointment. Please try again.");
-        console.error("Firestore Error:", error);
-        return;
-    }
+    }).catch(error => {
+        alert("⚠️ Error submitting form. Please try again.");
+        console.error("Error:", error);
+    });
+});
 
-    // ✅ PayU Payment Integration
-    let txnid = "TXN" + Date.now();
-    let hashData = {
-        key: "iQwXv8",
-        txnid,
-        amount: price,
-        productinfo: "Appointment",
-        firstname: fullName,
-        email
+// ✅ Redirect to PayU
+function redirectToPayU(data) {
+    let form = document.createElement("form");
+    form.action = "https://secure.payu.in/_payment";  // Production PayU URL
+    form.method = "POST";
+
+    let fields = {
+        key: "REPLACE_WITH_YOUR_KEY",   // Replace with your Merchant Key
+        txnid: "Txn" + Date.now(),
+        amount: data.price,
+        productinfo: data.service,
+        firstname: data.fullName,
+        email: data.email,
+        phone: data.phone,
+        surl: "https://divinecarepayu.infinityfreeapp.com/success.html",
+        furl: "https://divinecarepayu.infinityfreeapp.com/failure.html",
+        service_provider: "payu_paisa"
     };
 
-    try {
-        const response = await fetch("https://payu-backend-sur6.onrender.com", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(hashData)
-        });
+    fetch("https://divinecarepayu.byethost10.com/generate_hash.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams(fields)
+    })
+    .then(response => response.json())
+    .then(result => {
+        fields.hash = result.hash;
 
-        const result = await response.json();
-
-        if (!result.hash) {
-            alert("❌ Could not fetch payment hash. Please try again.");
-            return;
+        for (let key in fields) {
+            let input = document.createElement("input");
+            input.type = "hidden";
+            input.name = key;
+            input.value = fields[key];
+            form.appendChild(input);
         }
 
-        // ✅ Fill PayU Form
-        document.getElementById("payu_txnid").value = txnid;
-        document.getElementById("payu_amount").value = price;
-        document.getElementById("payu_firstname").value = fullName;
-        document.getElementById("payu_email").value = email;
-        document.getElementById("payu_phone").value = phone;
-        document.getElementById("payu_hash").value = result.hash;
-
-        // ✅ Submit to PayU
-        document.getElementById("payuForm").submit();
-
-    } catch (error) {
-        alert("❌ Error communicating with server. Try again later.");
-        console.error("Hash fetch error:", error);
-    }
-});
+        document.body.appendChild(form);
+        form.submit();
+    })
+    .catch(error => {
+        alert("⚠️ Payment setup failed. Please try again.");
+        console.error("Error:", error);
+    });
+}
