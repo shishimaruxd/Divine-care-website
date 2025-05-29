@@ -71,7 +71,7 @@ document.getElementById("confirm-btn").addEventListener("click", async function(
     };
 
     try {
-        const response = await fetch("https://divinecarepayu.byethost10.com/generate_hash.php", {
+        const response = await fetch("https://payu-backend-sur6.onrender.com", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(hashData)
